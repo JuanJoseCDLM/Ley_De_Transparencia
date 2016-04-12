@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head>
+	<link type="text/css" rel="stylesheet" href="dise_registrarsolicitud.css"/>
+	<title>DerechoDePEticion</title>
+</h:head> 
+<h:body>
+	<center><img src="logoucatolica.png"/></center>
+	<h:form>
+		<h1><h:outputLabel styleClass="labelusuario" value="#{beanMenu.usuariosolicitante}"></h:outputLabel></h1>
+	</h:form>
+	<div id="div">
+		<h:form>
+			<p:breadCrumb>
+    			<p:menuitem value="#{beanMenu.opcion1}" url="menu.xhtml">
+        			<f:param name="i" value="0" />
+    			</p:menuitem>
+    			<p:menuitem value="#{beanMenu.opcion1}" url="menu.xhtml">
+        			<f:param name="i" value="0" />
+    			</p:menuitem>
+    			<p:menuitem value="#{beanMenu.opcion2}" url="registrarsolicitud.xhtml">
+        			<f:param name="i" value="1" />
+    			</p:menuitem>
+    			<p:menuitem value="#{beanMenu.opcion3}" url="consultaciudadana.xhtml">
+        			<f:param name="i" value="2" />
+    			</p:menuitem>
+    			<p:menuitem value="#{beanMenu.opcion4}" url="registrarreposicion.xhtml">
+        			<f:param name="i" value="3" />
+    			</p:menuitem>
+			</p:breadCrumb>
+		</h:form>
+	</div>
+</h:body> 
+</html>

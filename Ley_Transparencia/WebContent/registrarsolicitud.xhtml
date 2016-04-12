@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head>
+	<link type="text/css" rel="stylesheet" href="dise_registrarsolicitud.css"/>
+	<title>DerechoDePEticion</title>
+</h:head>
+<h:body>
+	<center><img src="logoucatolica.png"/></center>
+	<h:form><center>
+		<p:breadCrumb>
+    		<p:menuitem value="#{beanRegistrarSolicitud.opcion1}"  >
+        		<f:param name="i" value="0" />
+    		</p:menuitem>
+    		<p:menuitem value="#{beanRegistrarSolicitud.opcion1}" url="menu.xhtml" >
+        		<f:param name="i" value="0" />
+    		</p:menuitem>
+    		<p:menuitem value="#{beanRegistrarSolicitud.opcion2}"  url="registrarsolicitud.xhtml">
+        		<f:param name="i" value="1" />
+    		</p:menuitem>
+    		<p:menuitem value="#{beanRegistrarSolicitud.opcion3}" url="consultaciudadana.xhtml">
+        		<f:param name="i" value="2" />
+    		</p:menuitem>
+    		<p:menuitem value="#{beanRegistrarSolicitud.opcion4}" url="registrarreposicion.xhtml">
+        		<f:param name="i" value="3" />
+    		</p:menuitem>
+		</p:breadCrumb>
+			
+		<h1 id="nota">Los datos que tengan * son de carácter obligatorio.</h1>
+		
+		
+		
+		<div class="izquierdo"><p:outputLabel styleClass="datos1" value="#{beanRegistrarSolicitud.emailsolicitante}"></p:outputLabel></div>
+		<div class="centro"><p:outputLabel styleClass="datos2" value="#{beanRegistrarSolicitud.direccionsolicitante}"></p:outputLabel></div>
+		<div class="derecho"><p:outputLabel styleClass="datos3" value="#{beanRegistrarSolicitud.celularsolicitante}"></p:outputLabel></div>
+		
+	
+		<br></br>
+		<br></br>
+		
+		<p:growl id="msgs" showDetail="true" />
+    		<h:panelGrid columns="2" cellpadding="5">
+    			<p:outputLabel styleClass="msj1"  value="#{beanRegistrarSolicitud.textlabelnombre}"></p:outputLabel><p:inputText placeholder="#{beanRegistrarSolicitud.tectcajanombre}"></p:inputText>
+				<p:outputLabel styleClass="msj2"  value="#{beanRegistrarSolicitud.textlabelcargo}"></p:outputLabel><p:inputText placeholder="#{beanRegistrarSolicitud.tectcajacargo}"></p:inputText>
+				
+				<p:outputLabel styleClass="msj3"  value="#{beanRegistrarSolicitud.textlabelentidad}"></p:outputLabel>		
+					<p:selectOneMenu value="#{beanRegistrarSolicitud.empresa}" style="width:200px">
+        				<f:selectItem itemLabel="Seleccionar empresa" itemValue="" noSelectionOption="true" />
+        				<f:selectItems value="#{beanRegistrarSolicitud.empresas}" />
+        			</p:selectOneMenu>            		
+				
+				<p:outputLabel styleClass="msj4" value="#{beanRegistrarSolicitud.textlabeltipo}"></p:outputLabel>
+        			<p:selectOneMenu value="#{beanRegistrarSolicitud.tipo}" style="width:200px">
+        				<f:selectItem itemLabel="Seleccionar tipo" itemValue="" noSelectionOption="true" />
+        				<f:selectItems value="#{beanRegistrarSolicitud.tipos}" />
+        			</p:selectOneMenu>
+				
+				<p:outputLabel styleClass="msj5" value="#{beanRegistrarSolicitud.textlabelaño}"></p:outputLabel>
+        			<p:selectOneMenu value="#{beanRegistrarSolicitud.año}" style="width:200px">
+        				<f:selectItem itemLabel="Seleccionar año" itemValue="" noSelectionOption="true" />
+        				<f:selectItems value="#{beanRegistrarSolicitud.años}" />
+        			</p:selectOneMenu>
+        
+        		<p:outputLabel styleClass="msj6" value="#{beanRegistrarSolicitud.textlabelarea}"></p:outputLabel>
+        			<p:selectOneMenu value="#{beanRegistrarSolicitud.area}" style="width:200px">
+			        	<f:selectItem itemLabel="Seleccionar area" itemValue="" noSelectionOption="true" />
+			        	<f:selectItems value="#{beanRegistrarSolicitud.areas}" />
+        			</p:selectOneMenu>
+    	</h:panelGrid>        
+    	
+    	<table>
+       		<tr>
+       			<td><p:outputLabel styleClass="msj7" value="#{beanRegistrarSolicitud.textlabelobservaciones}"></p:outputLabel></td>
+				<td><p:inputTextarea value="#{beanRegistrarSolicitud.observaciones}" rows="5" cols="30" maxlength="250" counterTemplate="{0} caracteres disponibles." autoResize="false" /></td>
+    			<p:outputLabel value="#{beanRegistrarSolicitud.empresa}"/>
+    		</tr>
+    		<tr>
+	    		<td class="transparente"></td>
+    			<td><h:outputText styleClass="display" /></td>
+    		</tr>
+    	</table>
+    	
+    	<table>
+    		<tr>
+    			<p:selectManyCheckbox>
+					<f:selectItem itemLabel="#{beanRegistrarSolicitud.checkboxcooreo}" itemValue="#{beanRegistrarSolicitud.checkboxcooreo}" />
+				</p:selectManyCheckbox>
+			</tr>
+			<tr>
+				<p:selectManyCheckbox>
+					<f:selectItem itemLabel="#{beanRegistrarSolicitud.checkboxcelular}" itemValue="#{beanRegistrarSolicitud.checkboxcelular}" />
+				</p:selectManyCheckbox>
+			</tr>
+			<tr>
+				<p:selectManyCheckbox>
+					<f:selectItem itemLabel="#{beanRegistrarSolicitud.checkboxdireccionfisica}" itemValue="#{beanRegistrarSolicitud.checkboxdireccionfisica}" />
+				</p:selectManyCheckbox>
+			</tr>
+		</table>
+    	<br />
+		<br />
+		
+		<p:commandButton styleClass="previsualizacion" value="#{beanRegistrarSolicitud.textbotonprevisualizacion}" actionListener="#{beanRegistrarSolicitud.previsualizacion()}">
+			<p:fileDownload value="#{beanRegistrarSolicitud.file}" />
+    	</p:commandButton>
+	   	<br />
+		<br />
+		<p:commandButton styleClass="enviar" value="#{beanRegistrarSolicitud.textbotonenviar}" action="#{beanRegistrarSolicitud.registrar_peticion()}"/>
+	</center></h:form>
+	<br />
+	<br />	
+</h:body>
+</html>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head>
+	<link type="text/css" rel="stylesheet" href="dise_registrarsolicitud.css"/>
+	<title>DerechoDePEticion</title>
+</h:head> 
+<h:body>
+	<center><img src="logoucatolica.png"/></center>
+	
+	
+	<h:form>
+		<p:breadCrumb>
+    		<p:menuitem value="#{beanConsultaCiudadana.opcion1}" url="menu.xhtml">
+       			<f:param name="i" value="0" />
+    		</p:menuitem>
+    		<p:menuitem value="#{beanConsultaCiudadana.opcion1}" url="menu.xhtml">
+       			<f:param name="i" value="0" />
+    		</p:menuitem>
+    		<p:menuitem value="#{beanConsultaCiudadana.opcion2}" url="registrarsolicitud.xhtml">
+       			<f:param name="i" value="1" />
+    		</p:menuitem>
+    		<p:menuitem value="#{beanConsultaCiudadana.opcion3}" url="consultaciudadana.xhtml">
+       			<f:param name="i" value="2" />
+    		</p:menuitem>
+    		<p:menuitem value="#{beanConsultaCiudadana.opcion4}" url="registrarreposicion.xhtml">
+       			<f:param name="i" value="3" />
+    		</p:menuitem>
+		</p:breadCrumb>
+			
+		<br></br>
+		<br></br>	
+			
+		<div class="izquierdo"><p:outputLabel styleClass="datos1" value="#{beanConsultaCiudadana.emailsolicitante}"></p:outputLabel></div>
+		<div class="centro"><p:outputLabel styleClass="datos2" value="#{beanConsultaCiudadana.direccionsolicitante}"></p:outputLabel></div>
+		<div class="derecho"><p:outputLabel styleClass="datos3" value="#{beanConsultaCiudadana.celularsolicitante}"></p:outputLabel></div>
+		
+		<br></br>
+		<br></br>
+			
+		<p:dataList id="aa" value="#{beanConsultaCiudadana.lista}" var="car" >
+			<f:facet name="header">
+           		Solicitudes
+       		</f:facet>
+       		
+       		<table>
+       			<tr>
+       				<td>#{car.idPeticion}      </td>      <td>#{car.fechaPeticion}      </td>      <td>      #{car.estado.tipoEstado}</td>
+       			</tr>
+       		</table>
+    	</p:dataList>
+		
+	</h:form>	
+</h:body> 
+</html>

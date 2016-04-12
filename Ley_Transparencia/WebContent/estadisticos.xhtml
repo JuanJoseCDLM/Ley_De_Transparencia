@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<link type="text/css" rel="stylesheet" href="dise_registrarsolicitud.css" />
+</h:head>
+<h:body>
+	<center>
+		<img src="logoucatolica.png" />
+	</center>
+	<h:form>
+		<p:tabMenu activeIndex="#{beanEstadistica.i}">
+			<p:menuitem value="#{beanEstadistica.opcion1}" icon="ui-icon-star" url="menugestionador.xhtml">
+        		<f:param name="i" value="0" />
+    		</p:menuitem>
+    		<p:menuitem value="#{beanEstadistica.opcion2}"  icon="ui-icon-search" url="solicitudes.xhtml">
+        		<f:param name="i" value="1" />
+    		</p:menuitem>
+    		<p:menuitem value="#{beanEstadistica.opcion3}" icon="ui-icon-document" url="gestionarsolicitud.xhtml">
+        		<f:param name="i" value="2" />
+    		</p:menuitem>
+    		<p:menuitem value="#{beanEstadistica.opcion4}" icon="ui-icon-document" url="estadisticos.xhtml">
+        		<f:param name="i" value="3" />
+    		</p:menuitem>
+		</p:tabMenu>
+		
+		<p:chart type="pie" model="#{beanEstadistica.pieModel1}" style="width:400px;height:300px" />
+	</h:form>
+	
+</h:body>
+</html>

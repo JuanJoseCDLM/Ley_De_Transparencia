@@ -1,34 +1,110 @@
 package vista;
 
-import javax.faces.bean.ManagedBean;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.RequestScoped;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+
+import javax.annotation.PostConstruct;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
- 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+
+import org.apache.commons.io.FilenameUtils;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
+
+import java.util.*;
+
+import modelo.Gestionador;
+import modelo.Peticion;
+import controlador.ControladorArchivos;
+import controlador.GestionAdministrador;
 @ManagedBean
-@ViewScoped
+@RequestScoped
 public class BeanGestionarSoli implements Serializable{
+	private String destination="D:\\tmp\\";
+	private static final long serialVersionUID = 8L;
 	
-	private static final long serialVersionUID = 1L;
-	private String textlabelnumerosolicitud="N° de registro de la solicitud:";
-	private String textlabelsubirinfo="Subir información:";
-	private String textlabelestadosolu="Estado de solicitud:";	
-	private String textbotonenviar="Enviar";	
-	private String estado;
-	private Map<String,String> estados;
-	private int i=2;	
+	private int i=2;
+	
+	private static final int tamaño_archivo = 6124;   
+	private String cargarcarpeta;
+	private static String nuevalinea ="\r";
+	
+	private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("LeyTransparencia");
+	private static final EntityManager em = emf.createEntityManager();	
+	private GestionAdministrador gestionAdministrador;
 	private String opcion1="¿Quienes somos?";
 	private String opcion2="Solicitudes";
 	private String opcion3="Gestionar solicitudes";
 	private String opcion4="Reportes";
+	private String opcion5="Cerrar Sesion";
 	
+	public static String login;	
+
+	private String textlabelnumerosolicitud="N° de registro de la solicitud:";
+	private String textlabelsubirinfo="Subir información:";
+	private String textlabelestadosolu="Estado de solicitud:";
+	
+	private String textbotonenviar="Enviar";
+	
+	private String estado;
+	private List<String> estadoss;
+	//private Map<String,Integer> estados;
+	
+	private String peticion;
+	private List<String> peticioness;
+
+	//private Map<String,Integer> peticiones;
+
+	private vista.BeanIndex beanIndex;
+
+	private UploadedFile file;
+	
+////////////get set
+	
+	    public UploadedFile getFile() {
+	        return file;
+	    }
+	 
+	    public void setFile(UploadedFile file) {
+	        this.file = file;
+	    }   	    
+	    
+	public static String getLogin() {
+		return login;
+	}
+
+	public static void setLogin(String login) {
+		BeanGestionarSoli.login = login;
+	}
+	
+	public List<String> getPeticioness() {
+		return peticioness;
+	}
+
+	public void setPeticioness(List<String> peticioness) {
+		this.peticioness = peticioness;
+	}	
+	public List<String> getEstadoss() {
+		return estadoss;
+	}
+
+	public void setEstadoss(List<String> estadoss) {
+		this.estadoss = estadoss;
+	}
+
 	public int getI() {
 		return i;
 	}
@@ -36,6 +112,14 @@ public class BeanGestionarSoli implements Serializable{
 	public void setI(int i) {
 		this.i = i;
 	}
+	public String getPeticion() {
+		return peticion;
+	}
+
+	public void setPeticion(String peticion) {
+		this.peticion = peticion;
+	}
+
 
 	public String getOpcion1() {
 		return opcion1;
@@ -68,6 +152,14 @@ public class BeanGestionarSoli implements Serializable{
 	public void setOpcion4(String opcion4) {
 		this.opcion4 = opcion4;
 	}
+	
+	public String getOpcion5() {
+		return opcion5;
+	}
+
+	public void setOpcion5(String opcion5) {
+		this.opcion5 = opcion5;
+	}
 
 	public String getTextlabelnumerosolicitud() {
 		return textlabelnumerosolicitud;
@@ -85,13 +177,6 @@ public class BeanGestionarSoli implements Serializable{
 		this.estado = estado;
 	}
 
-	public Map<String, String> getEstados() {
-		return estados;
-	}
-
-	public void setEstados(Map<String, String> estados) {
-		this.estados = estados;
-	}
 
 	public String getTextlabelsubirinfo() {
 		return textlabelsubirinfo;
@@ -117,12 +202,114 @@ public class BeanGestionarSoli implements Serializable{
 		this.textbotonenviar = textbotonenviar;
 	}
 	
+	public vista.BeanIndex getBeanIndex() {
+		return beanIndex;
+	}
+
+	public void setBeanIndex(vista.BeanIndex beanIndex) {
+		this.beanIndex = beanIndex;
+	}
+///////////metodos modificables	
 	@PostConstruct
     public void init() {
-        estados  = new HashMap<String, String>();
-        estados.put("Información Encontrada", "Información Encontrada");
-        estados.put("Información Confidencial", "Información Confidencial");
-        estados.put("Buscar Información", "Buscar Información");
-        estados.put("Derecho de reposición", "Derecho de reposición");
+        estadoss=new ArrayList();
+        
+        estadoss.add("Información Encontrada");
+        estadoss.add("Información Confidencial");
+        estadoss.add("Buscar Información");
+        
+        Query buscarGestionador = em.createQuery("SELECT g FROM Gestionador g WHERE g.cedulaGestionador ="+login);
+        Gestionador gestionador=(Gestionador)buscarGestionador.getSingleResult();
+        List<Peticion>listaPeticion=gestionador.getEmpresa().getPeticions();
+        Query buscarpeticion = em.createQuery("SELECT p FROM Peticion p WHERE p.estado_idEstado =4");
+        List<Peticion>listaPeticion_buscarinformacion=(List<Peticion>)buscarpeticion.getResultList();
+        
+        peticioness=new ArrayList();
+        
+        for(int i=0;i<listaPeticion.size();i++){
+        	//System.out.println("i"+i);
+        	int j=0;
+        	while(listaPeticion_buscarinformacion.size()>j){
+        		if(listaPeticion.get(i).equals(listaPeticion_buscarinformacion.get(j))){
+        			peticioness.add(Integer.toString(listaPeticion.get(i).getIdPeticion()));
+        		}
+        		j++;
+        	}
+        }
     }
+	
+	public void manejararchivos(String peticion) {
+		ExternalContext extContext =FacesContext.getCurrentInstance().getExternalContext();
+		int tamano=file.getFileName().length();
+		File resultado = new File(extContext.getRealPath(peticion+"peticion"+file.getFileName().subSequence(tamano-4, tamano)));
+		System.out.println(extContext.getRealPath(file.getFileName()));
+		try {
+			FileOutputStream fileOutputStream = new FileOutputStream(resultado);
+			byte[] tamaño = new byte[tamaño_archivo];
+			int espacio;
+			InputStream inputStream = file.getInputstream();
+			while (true) {
+				espacio = inputStream.read(tamaño);
+				if (espacio < 0) {
+					break;
+				}
+				fileOutputStream.write(tamaño, 0, espacio);
+				fileOutputStream.flush();
+			}
+
+			fileOutputStream.close();
+			inputStream.close();			
+			System.out.println(file.getSize()+" tamaño"+file.getContentType()+"tipo");
+			FacesMessage msg =new FacesMessage("Descripcion del archivo", "Nombre del archivo: " +
+			file.getFileName() +"\n Tamaño del archivo: " +
+			file.getSize() / 1024 +"\n Tipo: " + file.getContentType() +
+			"\\n EL ARCHIVO SE GUARDO CON EXITO!!!!!");
+
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			FacesMessage error = new FacesMessage(FacesMessage.SEVERITY_ERROR,"EL ARCHIVO NO SE SUBIO!!!!", "");
+			FacesContext.getCurrentInstance().addMessage(null, error);
+		}      
+	}
+	
+	public String RealizarCambio(){
+		gestionAdministrador=new GestionAdministrador();
+		ControladorArchivos controladorArchivos=new ControladorArchivos();
+		manejararchivos(peticion);
+		return "solicitudes.xhtml";
+		/*if(estado.equals("Información Encontrada")&& file!=null){
+			if(controladorArchivos.tamanoArchivo(file) && controladorArchivos.Reconocer_formato(file)){
+				manejararchivos(peticion);
+				System.out.println(peticion);
+				gestionAdministrador.Cambiar_estado_de_la_petición_en_caso_de_recibir_documento(peticion);			
+				//peticioness.remove(peticion);
+			
+				return "solicitudes.xhtml";
+			}
+			else{
+				return "solicitudes.xhtml";
+			}
+		}
+		else{
+			if(estado.equals("Información Confidencial"))
+			{
+				if(controladorArchivos.tamanoArchivo(file) && controladorArchivos.Reconocer_formato(file)){
+					manejararchivos(peticion);
+					System.out.println(peticion);
+					gestionAdministrador.Cambiar_estado_de_la_petición_en_caso_de_rechazo(peticion);
+					//peticioness.remove(peticion);
+					return "solicitudes.xhtml";
+				}
+				else{
+					return "solicitudes.xhtml";
+				}
+			}	
+			else
+			{
+						return "solicitudes.xhtml";
+			}
+		}*/
+	}
 }

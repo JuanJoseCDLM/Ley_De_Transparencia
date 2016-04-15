@@ -1,12 +1,21 @@
 package vista;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.Serializable;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import controlador.GestionUsuario;
 import modelo.Peticion;
@@ -101,4 +110,35 @@ public class BeanConsultaCiudadana implements Serializable{
 		GestionUsuario gu = new GestionUsuario();
 		lista=gu.Mostrar_las_peticiones_que_ha_realizado_un_solicitante(cedula);
 	}
+	
+	private StreamedContent file;
+    
+    public Object FileDownloadView(String idformulario){        
+        System.out.println(idformulario);
+    	InputStream stream1 = null;
+    	// Aquí la carpeta donde queremos buscar
+    	String Fichero = "C:\\Users\\JuanJose\\Documents\\Alumno.zip";
+    	File fichero = new File(Fichero);
+
+    	if (fichero.exists()){
+    		  System.out.println("El fichero " + Fichero + " existe");
+    		  try {
+    				stream1 = new FileInputStream("C:\\Users\\JuanJose\\Documents\\Alumno.zip");
+    				file = new DefaultStreamedContent(stream1, "text/zip", "optimus.zip");
+    			} catch (FileNotFoundException e){
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}
+    	        System.out.println(stream1);        
+    	        System.out.println(file);
+    	        return file;
+    	}
+    	else
+    	    System.out.println("Pues va a ser que no");       
+		return null;
+    }
+ 
+    public StreamedContent getFile() {
+        return file;
+    }
 }

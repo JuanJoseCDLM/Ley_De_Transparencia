@@ -29,6 +29,26 @@ public class Peticion implements Serializable {
 	private Date fechaPeticion;
 
 	private String observacionesPeticion;
+	
+	private boolean reposicion;
+	
+	@Column(insertable=false, updatable=false)
+	private int estado_idEstado;
+
+	@Column(insertable=false, updatable=false)
+	private int empresa_idEmpresa;
+
+	@Column(insertable=false, updatable=false)
+	private int empresa_Ciudad_idCiudad;
+
+	@Column(insertable=false, updatable=false)
+	private int empresa_Ciudad_Departamento_idDepartamento;
+
+	@Column(insertable=false, updatable=false)
+	private int usuario_cedulaUsuario;
+
+	@Column(insertable=false, updatable=false)
+	private int tipoInformacion_idTipoInformacion;
 
 	//bi-directional many-to-one association to Empresa
 	@ManyToOne
@@ -52,6 +72,14 @@ public class Peticion implements Serializable {
 	private Usuario usuario;
 
 	public Peticion() {
+	}
+	
+	public boolean getReposicion() {
+		return this.reposicion;
+	}
+
+	public void setReposicion(boolean reposicion) {
+		this.reposicion = reposicion;
 	}
 
 	public boolean getEstadoPeticion() {
@@ -109,24 +137,6 @@ public class Peticion implements Serializable {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-
-	@Column(insertable=false, updatable=false)
-	private int estado_idEstado;
-
-	@Column(insertable=false, updatable=false)
-	private int empresa_idEmpresa;
-
-	@Column(insertable=false, updatable=false)
-	private int empresa_Ciudad_idCiudad;
-
-	@Column(insertable=false, updatable=false)
-	private int empresa_Ciudad_Departamento_idDepartamento;
-
-	@Column(insertable=false, updatable=false)
-	private int usuario_cedulaUsuario;
-
-	@Column(insertable=false, updatable=false)
-	private int tipoInformacion_idTipoInformacion;
 
 	public int getIdPeticion() {
 		return this.idPeticion;

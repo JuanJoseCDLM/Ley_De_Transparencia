@@ -19,7 +19,8 @@ public class BeanEstadistica implements Serializable{
 	private String opcion2="Solicitudes";
 	private String opcion3="Gestionar solicitudes";
 	private String opcion4="Reportes";
-	
+	private String opcion5="Cerrar Sesion";
+
 	private int i=3;
 	
 	public int getI() {
@@ -60,6 +61,14 @@ public class BeanEstadistica implements Serializable{
 
 	public void setOpcion4(String opcion4) {
 		this.opcion4 = opcion4;
+	}
+	
+	public String getOpcion5() {
+		return opcion5;
+	}
+
+	public void setOpcion5(String opcion5) {
+		this.opcion5 = opcion5;
 	}
 
 	public PieChartModel getPieModel1() {

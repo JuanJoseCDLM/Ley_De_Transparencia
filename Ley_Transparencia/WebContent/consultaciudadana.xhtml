@@ -7,7 +7,7 @@
       xmlns:p="http://primefaces.org/ui"> 
 
 <h:head>
-	<link type="text/css" rel="stylesheet" href="dise_registrarsolicitud.css"/>
+	<link type="text/css" rel="stylesheet" href="dese_consultaciudadana.css"/>
 	<title>DerechoDePEticion</title>
 </h:head> 
 <h:body>
@@ -51,6 +51,20 @@
        		<table>
        			<tr>
        				<td>#{car.idPeticion}      </td>      <td>#{car.fechaPeticion}      </td>      <td>      #{car.estado.tipoEstado}</td>
+       				<td class="color"><p:growl id="growl" life="2000" />
+       						<p:commandButton value="Download" id="ajax" update="growl" action="#{beanConsultaCiudadana.FileDownloadView(car.idPeticion)}" onclick="PrimeFaces.monitorDownload(start, stop);"  >
+        						
+        						<p:fileDownload value="#{beanConsultaCiudadana.file}" />
+    						</p:commandButton>
+    						<script type="text/javascript">
+function start() {
+    PF('statusDialog').show();
+}
+ 
+function stop() {
+    PF('statusDialog').hide();
+}
+</script></td>
        			</tr>
        		</table>
     	</p:dataList>

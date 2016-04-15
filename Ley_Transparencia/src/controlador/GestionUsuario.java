@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.io.FileNotFoundException;
@@ -23,6 +24,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.InputStream;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 
@@ -46,9 +48,15 @@ import org.dom4j.DocumentException;*/
 
 
 
+
+
+
+
 import vista.BeanConsultaCiudadana;
+import vista.BeanGestionarSoli;
 import vista.BeanIndex;
 import vista.BeanMenu;
+import vista.BeanRegistrarReposicion;
 import vista.BeanRegistrarSolicitud;
 import vista.BeanSolicitud;
 import modelo.Ciudad;
@@ -65,6 +73,8 @@ public class GestionUsuario {
 	private static final EntityManager entitymanager = entitymanagerfactory.createEntityManager();
 	private static final String buscarusuario="SELECT u FROM Usuario u";
 	private static final String buscarpeticion="SELECT p FROM Peticion p";
+
+	private FacesMessage facesMessage;
 	private static Usuario usuario;
 	private static Gestionador gestionador;
 	private static Peticion peticion;
@@ -106,55 +116,132 @@ public class GestionUsuario {
 		}				
 		return null;
 	}
+	
+	public Object AutenticarSolicitante(String cedula, String contrasena){
+		try{
+			Query consultausuario = entitymanager.createQuery("SELECT u FROM Usuario u WHERE u.cedulaUsuario ="+cedula+" and u.contrasenaUsuario ="+"\""+contrasena+"\"");
+			usuario =(Usuario) consultausuario.getSingleResult();
+			BeanRegistrarSolicitud bs = new BeanRegistrarSolicitud();
+			
+			BeanMenu bm = new BeanMenu();
+			bm.a=Integer.toString(usuario.getCedulaUsuario());
 
-	public Usuario AutenticarSolicitante(String cedula, String contrasena){
-		int login=12; String password="abc";
-		Query queryautenticar=entitymanager.createQuery(buscarusuario);
-		List<Usuario> listausuarios = queryautenticar.getResultList();
-		usuario = new Usuario();
-		
-		for (int i=0;i<listausuarios.size();i++){			
-			usuario=listausuarios.get(i);
-			login=usuario.getCedulaUsuario();
-			password=usuario.getContrasenaUsuario();
 			
-			usuario=listausuarios.get(i);
+			bs.direccion = usuario.getDireccionUsuario();
+			bs.email = usuario.getEmailUsuario();
+			bs.celular = usuario.getCelularUsuario();
+			bs.nombre = usuario.getNombreUsuario();
+			bs.apellido = usuario.getApellidoUsuario();
+			bs.cedula = usuario.getCedulaUsuario();
 			
-			if (login==Integer.parseInt(cedula) && password.equals(contrasena)){												
-				BeanMenu bm = new BeanMenu();
-				bm.a=Integer.toString(usuario.getCedulaUsuario());
-				
-				BeanRegistrarSolicitud bs = new BeanRegistrarSolicitud();
-				bs.direccion = usuario.getDireccionUsuario();
-				bs.email = usuario.getEmailUsuario();
-				bs.celular = usuario.getCelularUsuario();
-				bs.nombre = usuario.getNombreUsuario();
-				bs.apellido = usuario.getApellidoUsuario();
-				bs.cedula = usuario.getCedulaUsuario();
-				
-				BeanConsultaCiudadana bcc= new BeanConsultaCiudadana();
-				bcc.cedula=usuario.getCedulaUsuario();
-				bcc.email = usuario.getEmailUsuario();
-				bcc.direccion = usuario.getDireccionUsuario();
-				bcc.celular = usuario.getCelularUsuario();				
-				return usuario;
-			} 	
-			else{
-				try{
-					Query consultaugestionador = entitymanager.createQuery("SELECT g FROM Gestionador g WHERE g.cedulaGestionador ="+cedula+" and g.contrasenaGestionador="+"\""+contrasena+"\"");
-					gestionador = (Gestionador) consultaugestionador.getSingleResult();
-					BeanSolicitud bs = new BeanSolicitud();
-					bs.cedulagestionador=gestionador.getCedulaGestionador();
-					return null; 
-				}catch(NoResultException e){
-					
-				}				
-			}
-		}	
-		return null;
+			BeanConsultaCiudadana bcc= new BeanConsultaCiudadana();
+			bcc.cedula=usuario.getCedulaUsuario();
+			bcc.email = usuario.getEmailUsuario();
+			bcc.direccion = usuario.getDireccionUsuario();
+			bcc.celular = usuario.getCelularUsuario();
+			
+			BeanRegistrarReposicion brr = new BeanRegistrarReposicion();
+			brr.cedula=usuario.getCedulaUsuario();
+			brr.email = usuario.getEmailUsuario();
+			brr.direccion = usuario.getDireccionUsuario();
+			brr.celular = usuario.getCelularUsuario();
+	
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Has iniciado Sesión",""));
+			return usuario;
+		}catch(NoResultException e){
+			try{
+				Query consultaugestionador = entitymanager.createQuery("SELECT g FROM Gestionador g WHERE g.cedulaGestionador ="+cedula+" and g.contrasenaGestionador="+"\""+contrasena+"\"");
+				gestionador = (Gestionador) consultaugestionador.getSingleResult();
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Has iniciado Sesión",""));
+				return gestionador; 
+			}catch(NoResultException ew){
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "La cedula o contraseña es incorrecta"));
+				return "mal";
+			}				
+		}
 	}
 	
+	
 	public void registrarpeticion(Date fecha, String observaciones, String area, String entidad, String tipoinfo, String año, int cedula){
+		Query querypeticion=entitymanager.createQuery(buscarpeticion);
+		List<Peticion> listapeticiones = querypeticion.getResultList();
+		idpeticion=listapeticiones.size()+1;
+		System.out.println(listapeticiones.size());
+		System.out.println(idpeticion);
+		try{
+			Query consultapeticion = entitymanager.createQuery("SELECT p FROM Peticion p WHERE p.idPeticion ="+Integer.toString(idpeticion));
+			List<Peticion> listaconpe=consultapeticion.getResultList();
+			peticion=(Peticion) consultapeticion.getSingleResult();
+			System.out.println("Ya existe el id. /n Vuelva intentarlo.");
+		}catch(NoResultException e){
+			try{
+				Query consultaestado=entitymanager.createQuery("SELECT e FROM Estado e WHERE e.tipoEstado = :tipoEstado");
+				consultaestado.setParameter("tipoEstado", "Buscando informacion");
+				Estado listaestados=(Estado) consultaestado.getSingleResult();
+				System.out.println("Estado encontrado.");
+				try{
+					Query consultausuario=entitymanager.createQuery("SELECT u FROM Usuario u WHERE u.cedulaUsuario = "+cedula);
+					System.out.println(cedula);
+					//consultausuario.setParameter("cedulaUsuario", cedula);
+					Usuario listausuario=(Usuario) consultausuario.getSingleResult();
+					System.out.println("Usuario encontrado.");
+					try{
+						Query consultatipo=entitymanager.createQuery("SELECT t FROM Tipoinformacion t WHERE t.nombreTipoInformacion = :nombreTipoInformacion");
+						consultatipo.setParameter("nombreTipoInformacion", tipoinfo);
+						Tipoinformacion listatipo=(Tipoinformacion) consultatipo.getSingleResult();
+						System.out.println("Tipo enconrado.");
+						
+						Query q=entitymanager.createQuery("SELECT t FROM Tipoinformacion t");
+						List<Tipoinformacion> resultados=q.getResultList();
+						tipoinformacion = new Tipoinformacion();
+						for(int i=0;i<resultados.size();i++){
+							tipoinformacion=resultados.get(i);
+				        	
+				        	String tipo=tipoinformacion.getNombreTipoInformacion();
+				        	if(tipo.equals(tipoinfo)){
+				        		idtipo=tipoinformacion.getIdTipoInformacion();				        		
+				        	}
+						}
+						
+						try{
+							Query consultaempresa=entitymanager.createQuery("SELECT e FROM Empresa e WHERE e.nombreEmpresa = :nombreEmpresa");
+							consultaempresa.setParameter("nombreEmpresa", entidad);
+							Empresa listaempresa=(Empresa) consultaempresa.getSingleResult();
+							
+							System.out.println("Empresa enconrada.");							
+			        		idempresa=listaempresa.getIdEmpresa();
+			        		idempresaciudad=listaempresa.getCiudad_idCiudad();
+			        		idempresadepartamento=listaempresa.getCiudad_Departamento_idDepartamento();       
+
+							peticion = new Peticion();
+							peticion.setIdPeticion(idpeticion);
+							peticion.setFechaPeticion(fecha);
+							peticion.setObservacionesPeticion(observaciones);
+							peticion.setEstadoPeticion(true);
+							peticion.setEstado(listaestados);
+							peticion.setEmpresa(listaempresa);
+							peticion.setUsuario(listausuario);
+							peticion.setTipoinformacion(listatipo);			
+							usuario.addPeticion(peticion);
+							entitymanager.getTransaction().begin();
+							entitymanager.persist(peticion);
+							entitymanager.getTransaction().commit();
+						}catch(NoResultException e4){
+							System.out.println("Empresa no enconrada.");
+						}
+					}catch(NoResultException e3){
+						System.out.println("No existe este tipo de informacion. /n Vuelva intentarlo.");
+					}
+				}catch(NoResultException e2){
+					System.out.println("Usuario no encontrado.");
+				}
+			}catch(NoResultException e1){
+				System.out.println("Ya estado no existe. /n Vuelva intentarlo.");
+			}
+		}
+	}
+	
+	public void registrarreposicion(Date fecha, String observaciones, String area, String entidad, String tipoinfo, String año, int cedula){
 		Query querypeticion=entitymanager.createQuery(buscarpeticion);
 		List<Peticion> listapeticiones = querypeticion.getResultList();
 		idpeticion=listapeticiones.size()+1;
@@ -293,6 +380,29 @@ public class GestionUsuario {
 		List<Peticion> listausuariopeticion=usuario.getPeticions();
 		System.out.println("el usuario existe");
 		return listausuariopeticion;
+	}
+
+	public List<String> peticiones(int cedula){
+		List<Peticion> peticiones;
+		peticiones=new ArrayList();
+		List<String> peticioness;
+		Query consultausuario=entitymanager.createQuery("SELECT u FROM Usuario u WHERE u.cedulaUsuario = "+cedula);
+		System.out.println(cedula);
+		//consultausuario.setParameter("cedulaUsuario", cedula);
+		Usuario listausuario=(Usuario) consultausuario.getSingleResult();
+		System.out.println("Usuario encontrado.");	
+		
+		List<Peticion>listaPeticion=listausuario.getPeticions();
+        
+        peticioness=new ArrayList();
+        
+        for(int i=0;i<listaPeticion.size();i++){
+        	//System.out.println("i"+i);
+        	peticioness.add(Integer.toString(listaPeticion.get(i).getIdPeticion()));
+        	
+        	//return peticioness;
+        }
+		return peticioness;
 	}
 	
 }

@@ -14,7 +14,7 @@
 	<center><img src="logoucatolica.png"/></center>
 	
 	
-	<h:form>
+	<h:form><center>
 		<p:breadCrumb>
     		<p:menuitem value="#{beanRegistrarReposicion.opcion1}" url="menu.xhtml">
        			<f:param name="i" value="0" />
@@ -34,15 +34,92 @@
 		</p:breadCrumb>
 			
 		<br></br>
-		<br></br>	
-			
-		<!--<div class="izquierdo"><p:outputLabel styleClass="datos1" value="#{beanConsultaCiudadana.emailsolicitante}"></p:outputLabel></div>
-		<div class="centro"><p:outputLabel styleClass="datos2" value="#{beanConsultaCiudadana.direccionsolicitante}"></p:outputLabel></div>
-		<div class="derecho"><p:outputLabel styleClass="datos3" value="#{beanConsultaCiudadana.celularsolicitante}"></p:outputLabel></div>
-		-->
+		<br></br><h1 id="nota">Los datos que tengan * son de carácter obligatorio.</h1>
+		
+		<div class="izquierdo"><p:outputLabel styleClass="datos1" value="#{beanRegistrarReposicion.emailsolicitante}"></p:outputLabel></div>
+		<div class="centro"><p:outputLabel styleClass="datos2" value="#{beanRegistrarReposicion.direccionsolicitante}"></p:outputLabel></div>
+		<div class="derecho"><p:outputLabel styleClass="datos3" value="#{beanRegistrarReposicion.celularsolicitante}"></p:outputLabel></div>
+		
 		<br></br>
 		<br></br>
 		
-	</h:form>	
+		<br></br><h3 id="nota">Elija el numero de la peticion a la cual le desea realizar la reposicion.</h3>
+		
+		<p:selectOneMenu id="Peticion" value="#{beanRegistrarReposicion.peticion}" style="width:150px">
+				<f:selectItem itemLabel="N° peticion" itemValue="" noSelectionOption="true" />
+				<f:selectItems value="#{beanRegistrarReposicion.peticiones}" />
+			</p:selectOneMenu>
+		
+		<p:growl id="msgs" showDetail="true" />
+    		<h:panelGrid columns="2" cellpadding="5">
+    			<p:outputLabel styleClass="msj1"  value="#{beanRegistrarReposicion.textlabelnombre}"></p:outputLabel><p:inputText placeholder="#{beanRegistrarReposiciontectcajanombre}"></p:inputText>
+				<p:outputLabel styleClass="msj2"  value="#{beanRegistrarReposicion.textlabelcargo}"></p:outputLabel><p:inputText placeholder="#{beanRegistrarReposicion.tectcajacargo}"></p:inputText>
+				
+				<p:outputLabel styleClass="msj3"  value="#{beanRegistrarReposicion.textlabelentidad}"></p:outputLabel>		
+					<p:selectOneMenu value="#{beanRegistrarReposicion.empresa}" style="width:200px">
+        				<f:selectItem itemLabel="Seleccionar empresa" itemValue="" noSelectionOption="true" />
+        				<f:selectItems value="#{beanRegistrarReposicion.empresas}" />
+        			</p:selectOneMenu>            		
+				
+				<p:outputLabel styleClass="msj4" value="#{beanRegistrarReposicion.textlabeltipo}"></p:outputLabel>
+        			<p:selectOneMenu value="#{beanRegistrarReposicion.tipo}" style="width:200px">
+        				<f:selectItem itemLabel="Seleccionar tipo" itemValue="" noSelectionOption="true" />
+        				<f:selectItems value="#{beanRegistrarReposicion.tipos}" />
+        			</p:selectOneMenu>
+				
+				<p:outputLabel styleClass="msj5" value="#{beanRegistrarReposicion.textlabelaño}"></p:outputLabel>
+        			<p:selectOneMenu value="#{beanRegistrarReposicion.año}" style="width:200px">
+        				<f:selectItem itemLabel="Seleccionar año" itemValue="" noSelectionOption="true" />
+        				<f:selectItems value="#{beanRegistrarReposicion.años}" />
+        			</p:selectOneMenu>
+        
+        		<p:outputLabel styleClass="msj6" value="#{beanRegistrarReposicion.textlabelarea}"></p:outputLabel>
+        			<p:selectOneMenu value="#{beanRegistrarReposicion.area}" style="width:200px">
+			        	<f:selectItem itemLabel="Seleccionar area" itemValue="" noSelectionOption="true" />
+			        	<f:selectItems value="#{beanRegistrarReposicion.areas}" />
+        			</p:selectOneMenu>
+    	</h:panelGrid>        
+    	
+    	<table>
+       		<tr>
+       			<td><p:outputLabel styleClass="msj7" value="#{beanRegistrarReposicion.textlabelobservaciones}"></p:outputLabel></td>
+				<td><p:inputTextarea value="#{beanRegistrarReposicion.observaciones}" rows="5" cols="30" maxlength="250" counterTemplate="{0} caracteres disponibles." autoResize="false" /></td>
+    			<p:outputLabel value="#{beanRegistrarReposicion.empresa}"/>
+    		</tr>
+    		<tr>
+	    		<td class="transparente"></td>
+    			<td><h:outputText styleClass="display" /></td>
+    		</tr>
+    	</table>
+    	
+    	<table>
+    		<tr>
+    			<p:selectManyCheckbox>
+					<f:selectItem itemLabel="#{beanRegistrarReposicion.checkboxcooreo}" itemValue="#{beanRegistrarReposicion.checkboxcooreo}" />
+				</p:selectManyCheckbox>
+			</tr>
+			<tr>
+				<p:selectManyCheckbox>
+					<f:selectItem itemLabel="#{beanRegistrarReposicion.checkboxcelular}" itemValue="#{beanRegistrarReposicion.checkboxcelular}" />
+				</p:selectManyCheckbox>
+			</tr>
+			<tr>
+				<p:selectManyCheckbox>
+					<f:selectItem itemLabel="#{beanRegistrarReposicion.checkboxdireccionfisica}" itemValue="#{beanRegistrarReposicion.checkboxdireccionfisica}" />
+				</p:selectManyCheckbox>
+			</tr>
+		</table>
+    	<br />
+		<br />
+		
+		<p:commandButton styleClass="previsualizacion" value="#{beanRegistrarReposicion.textbotonprevisualizacion}" actionListener="#{beanRegistrarReposicion.previsualizacion()}">
+			<p:fileDownload value="#{beanRegistrarReposicion.file}" />
+    	</p:commandButton>
+	   	<br />
+		<br />
+		<p:commandButton styleClass="enviar" value="#{beanRegistrarReposicion.textbotonenviar}" action="#{beanRegistrarReposicion.registrar_reposicion()}"/>
+	</center></h:form>
+	<br />
+	<br />
 </h:body> 
 </html>

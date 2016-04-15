@@ -54,8 +54,8 @@ public class PruebasUnidad {
 	public static Estado estado(){
 		Estado est = new Estado();
 		
-		est.setIdEstado(i+4);
-		est.setTipoEstado("Buscando informacion");
+		est.setIdEstado(i+3);
+		est.setTipoEstado("Informacion encontr");
 		est.setEstadoEstado(true);
 		
 		em.getTransaction().begin();
@@ -125,6 +125,7 @@ public class PruebasUnidad {
 		pet.setEmpresa(empresa);
 		pet.setTipoinformacion(tipo);
 		pet.setUsuario(usuario);
+		pet.setReposicion(false);
 		
 		em.getTransaction().begin();
 		em.persist(pet);
@@ -161,24 +162,24 @@ public class PruebasUnidad {
 	}
 	
 	public static void main(String args[]) throws ParseException{
-		/*Departamento d;
-		d = departamento();
+		//Departamento d;
+		//d = departamento();
 		
-		Ciudad ci;
-		ci = ciudad(d);*/
+		//Ciudad ci;
+		//ci = ciudad(d);
 		
-		Empresa ge;
+		//Empresa ge;
 		//ge=empresa(ci);
 		
 		//gestionador(ge);
 		
 		//area(ge);
 		
-		/*Estado e;
-		e=estado();*/
+		Estado e;
+		e=estado();
 		
 		//Tipoinformacion ti;
-		//ti=tipoinfo();
+		//7ti=tipoinfo();
 		
 		//Usuario u;
 		//u=usuario();

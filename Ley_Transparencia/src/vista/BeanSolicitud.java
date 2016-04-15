@@ -4,10 +4,14 @@ import java.io.Serializable;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+
 import java.io.Serializable;
 import java.util.List;
+
 import controlador.GestionAdministrador;
+
 import javax.annotation.PostConstruct;
+
 import modelo.Peticion;
 import modelo.Gestionador;
 
@@ -17,12 +21,25 @@ public class BeanSolicitud implements Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	private int i=1;	
+	private String productId;
+	
+	public String getProductId() {
+		return productId;
+	}
+
+	public void setProductId(String productId){
+		this.productId = productId;
+	}
+	private static final long serialVersionUID = 7L;
+
+	private int i=1;
+	
 	private String opcion1="¿Quienes somos?";
 	private String opcion2="Solicitudes";
 	private String opcion3="Gestionar solicitudes";
 	private String opcion4="Reportes";
+	private String opcion5="Cerrar Sesion";
+
 	public static int cedulagestionador;
 	
 	List<Peticion> lista;
@@ -74,10 +91,20 @@ public class BeanSolicitud implements Serializable{
 	public void setOpcion4(String opcion4) {
 		this.opcion4 = opcion4;
 	}
-	
+	public String getOpcion5() {
+		return opcion5;
+	}
+
+	public void setOpcion5(String opcion5) {
+		this.opcion5 = opcion5;
+	}
 	@PostConstruct
 	public void init() {
-		GestionAdministrador usuario_Administrador=new GestionAdministrador ();		
-		lista=(List<Peticion>) usuario_Administrador.Mostrar_las_peticiones_que_han_llegado_al_Usuario_Administrador(cedulagestionador);		
-	}	
+		System.out.println(cedulagestionador);
+		if(cedulagestionador>0){
+			GestionAdministrador usuario_Administrador=new GestionAdministrador ();		
+			lista=usuario_Administrador.Mostrar_las_peticiones_que_han_llegado_al_Usuario_Administrador(cedulagestionador);
+		}		
+	}
+
 }

@@ -38,8 +38,6 @@ public class BeanIndex implements Serializable{
 		this.password = password;
 	}
 
-
-
 	public String getTextolink() {
 		return textolink;
 	}
@@ -88,22 +86,35 @@ public class BeanIndex implements Serializable{
 		this.textobotonregistrarusuario = textobotonregistrarusuario;
 	}
 	
-	public Object iniciarsesion(){
+public String iniciarsesion(){
+		
+		//RequestContext context = RequestContext.getCurrentInstance();
+		//FacesMessage msg = null;
 		GestionUsuario gestionarsolicitante = new GestionUsuario();
-		usuario=new Usuario();
-		usuario= gestionarsolicitante.AutenticarSolicitante(login, password);
-		if(usuario != null){
+		//aqui busca si existe un usuario 
+		if(gestionarsolicitante.AutenticarSolicitante(login, password).getClass().getName().equals("modelo.Usuario")){
 			BeanMenu bn = new BeanMenu();
 			bn.a=login;
-			System.out.println("Esta entrando???");
+			//System.out.println(gestionarsolicitante.AutenticarSolicitante(login, password).getClass().getName());
 			return "menu.xhtml";
 		}
 		else{
-			System.out.println("Esta entrando aqui");
-			return "menugestionador.xhtml";
+			//aqui busca si existe un gestionador
+			if(gestionarsolicitante.AutenticarSolicitante(login, password).getClass().getName().equals("modelo.Gestionador")){
+				BeanMenuGestionador bmg=new BeanMenuGestionador(); 
+				bmg.login=login;
+				BeanSolicitud bs=new BeanSolicitud();
+				bs.cedulagestionador=Integer.parseInt(login);
+				BeanGestionarSoli bgs=new BeanGestionarSoli();
+				bgs.login=login;
+				//System.out.println(gestionarsolicitante.AutenticarSolicitante(login, password).getClass().getName());
+				return "menugestionador.xhtml";
+			}
+			else{
+				return "nnaa";
+			}
 		}
 	}
-	
 	public Object cambio_registrarse(){
 		System.out.println("Esta entrando.");
 		return "registrarusuario.xhtml";

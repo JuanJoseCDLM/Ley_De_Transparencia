@@ -278,8 +278,8 @@ public class BeanGestionarSoli implements Serializable{
 		gestionAdministrador=new GestionAdministrador();
 		ControladorArchivos controladorArchivos=new ControladorArchivos();
 		manejararchivos(peticion);
-		return "solicitudes.xhtml";
-		/*if(estado.equals("Información Encontrada")&& file!=null){
+		//return "solicitudes.xhtml";
+		if(estado.equals("Información Encontrada")&& file!=null){
 			if(controladorArchivos.tamanoArchivo(file) && controladorArchivos.Reconocer_formato(file)){
 				manejararchivos(peticion);
 				System.out.println(peticion);
@@ -300,16 +300,14 @@ public class BeanGestionarSoli implements Serializable{
 					System.out.println(peticion);
 					gestionAdministrador.Cambiar_estado_de_la_petición_en_caso_de_rechazo(peticion);
 					//peticioness.remove(peticion);
-					return "solicitudes.xhtml";
+					{return "solicitudes.xhtml";}
 				}
 				else{
 					return "solicitudes.xhtml";
 				}
 			}	
 			else
-			{
-						return "solicitudes.xhtml";
-			}
-		}*/
+				{return "solicitudes.xhtml";}			
+		}
 	}
 }

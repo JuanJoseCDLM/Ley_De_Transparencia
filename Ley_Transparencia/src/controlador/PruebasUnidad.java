@@ -97,14 +97,14 @@ public class PruebasUnidad {
 	public static Usuario usuario(){
 		Usuario us = new Usuario();
 		BigInteger bi = new BigInteger("3103346632", 10);
-		int a=1987345631;
+		int a=1;
 		us.setCedulaUsuario(a);
-		us.setNombreUsuario("Juan CArlos");
-		us.setApellidoUsuario("Sanchez fajardo");
+		us.setNombreUsuario("Jessica");
+		us.setApellidoUsuario("Ortiza");
 		us.setCelularUsuario(bi);
-		us.setEmailUsuario("nombre@nomolestar.abrace");
-		us.setDireccionUsuario("portal norte");
-		us.setContrasenaUsuario("futbol");
+		us.setEmailUsuario("@gmail.com");
+		us.setDireccionUsuario("Ciudad salitre");
+		us.setContrasenaUsuario("123");
 		us.setEstadoUsuario(true);
 		
 		em.getTransaction().begin();
@@ -175,14 +175,14 @@ public class PruebasUnidad {
 		
 		//area(ge);
 		
-		Estado e;
-		e=estado();
+		//Estado e;
+		//e=estado();
 		
 		//Tipoinformacion ti;
 		//7ti=tipoinfo();
 		
-		//Usuario u;
-		//u=usuario();
+		Usuario u;
+		u=usuario();
 		
 		//peticion(ge, u, e, ti);
 		/*long yournumber=23377855;

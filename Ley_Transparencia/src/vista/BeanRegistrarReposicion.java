@@ -34,6 +34,7 @@ public class BeanRegistrarReposicion implements Serializable{
 	private String opcion2="Realizar petición";
 	private String opcion3="Consulta ciudadana";
 	private String opcion4="Reposición";
+	private String opcion5="Cerrar Sesion";
 	private String textlabelentidad="Entidad:*";
 	private String textlabelnombre="Nombre:";
 	private String textlabelcargo="Cargo:";
@@ -85,6 +86,14 @@ public class BeanRegistrarReposicion implements Serializable{
 	
 	public String getPeticion() {
 		return peticion;
+	}
+
+	public String getOpcion5() {
+		return opcion5;
+	}
+
+	public void setOpcion5(String opcion5) {
+		this.opcion5 = opcion5;
 	}
 
 	public void setPeticion(String peticion) {
@@ -414,5 +423,30 @@ public class BeanRegistrarReposicion implements Serializable{
         	return file;
         return null;
 	}
+	
+	public String cerrarsesion(){
+    	BeanMenu bm = new BeanMenu();
+		bm.email=null;
+		bm.direccion=null;
+
+		BeanRegistrarSolicitud bs = new BeanRegistrarSolicitud();
+		bs.direccion = null;
+		bs.email = null;
+		bs.nombre = null;
+		bs.apellido = null;
+		bs.cedula = 0;
+		
+		BeanConsultaCiudadana bcc= new BeanConsultaCiudadana();
+		bcc.cedula = 0;
+		bcc.email = null;
+		bcc.direccion = null;
+		
+		BeanRegistrarReposicion brr = new BeanRegistrarReposicion();
+		brr.cedula=0;
+		brr.email = null;
+		brr.direccion = null;
+		brr.celular = null;
+    	return "index.xhtml";
+    }
 }
 

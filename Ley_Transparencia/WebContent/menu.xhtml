@@ -12,11 +12,9 @@
 </h:head> 
 <h:body>
 	<center><img src="logoucatolica.png"/></center>
-	<h:form>
-		<h1><h:outputLabel styleClass="labelusuario" value="#{beanMenu.usuariosolicitante}"></h:outputLabel></h1>
-	</h:form>
-	<div id="div">
-		<h:form>
+	
+	<h:form><center>
+		<div id="div">
 			<p:breadCrumb>
     			<p:menuitem value="#{beanMenu.opcion1}" url="menu.xhtml">
         			<f:param name="i" value="0" />
@@ -33,8 +31,25 @@
     			<p:menuitem value="#{beanMenu.opcion4}" url="registrarreposicion.xhtml">
         			<f:param name="i" value="3" />
     			</p:menuitem>
+    			<p:menuitem value="#{beanMenu.opcion5}" action="#{beanConsultaCiudadana.cerrarsesion()}">
+        			<f:param name="i" value="4" />
+    			</p:menuitem>
 			</p:breadCrumb>
-		</h:form>
-	</div>
+		</div>
+		<br></br>
+		<br></br>
+		<br></br>
+		<br></br>
+			
+		<div class="centro">			
+			<table>			
+				<tr>
+					<td><strong><p:outputLabel styleClass="datos1" value="#{beanMenu.emailsolicitante}"> |</p:outputLabel></strong></td>					
+					<td><strong><p:outputLabel styleClass="datos2" value="#{beanMenu.direccionsolicitante}"> |</p:outputLabel></strong></td>					
+					<td><strong><p:outputLabel styleClass="datos3" value="#{beanMenu.celularsolicitante}"></p:outputLabel></strong></td>
+				</tr>
+			</table>			
+		</div>
+	</center></h:form>	
 </h:body> 
 </html>

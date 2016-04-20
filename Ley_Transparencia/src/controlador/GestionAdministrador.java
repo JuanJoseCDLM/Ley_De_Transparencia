@@ -2,9 +2,19 @@ package controlador;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
@@ -13,7 +23,18 @@ import javax.persistence.Query;
 
 import org.primefaces.model.chart.PieChartModel;
 
+
+
+
+
+
+import javax.mail.*;
+import javax.mail.internet.*;
+
+import java.util.*;
+
 import vista.BeanEstadistica;
+import vista.BeanGestionarSoli;
 import vista.BeanRegistrarSolicitud;
 import modelo.Empresa;
 import modelo.Estado;
@@ -24,8 +45,18 @@ import modelo.Usuario;
 public class GestionAdministrador {
 	private static final EntityManagerFactory entitymanagerfactory = Persistence.createEntityManagerFactory("LeyTransparencia");
 	private static final EntityManager entitymanager = entitymanagerfactory.createEntityManager();
+	private static final String String = null;
 	private static Gestionador gestionador;
 	private FacesMessage facesMessage;
+	
+	final String miCorreo = "respuestadesolicitudes@gmail.com";
+    final String miContraseña = "respuestadesolicitudes&&";
+    final String servidorSMTP = "smtp.gmail.com";
+    final String puertoEnvio = "465";
+    String mailReceptor = null;
+    String asunto = "Respuesta de solicitud";
+    String cuerpo = "Este es el cuerpo";
+    public String ruta2;
 	
 	///////////CU6 Cambiar estado de la petición en caso de rechazo
 	//paso2:Ingresa el número de la peticion
@@ -65,7 +96,7 @@ public class GestionAdministrador {
 	///////////CU7 Cambiar estado de la petición en caso de recibir documento()
 	//paso2:Ingresa el número de la peticion
 	//paso5:Ingresar la cedula del usuario solicitante
-	public void Cambiar_estado_de_la_petición_en_caso_de_recibir_documento(String idpeticion){
+	public void Cambiar_estado_de_la_petición_en_caso_de_recibir_documento(String idpeticion, String nombre){
 		//paso3:valida que exista una peticion con ese número
 		try{
 			//String Snumero_peticion=String.valueOf(idpeticion);
@@ -73,14 +104,58 @@ public class GestionAdministrador {
 			Peticion peticion=(Peticion) consulta.getSingleResult();
 		
 			//paso4:cambiar el estado de la peticion de Buscando informacion a Info. Encontrada
-			Query consulta2=entitymanager.createQuery("SELECT e FROM Estado e WHERE e.idEstado =  1");
+			Query consulta2=entitymanager.createQuery("SELECT e FROM Estado e WHERE e.idEstado =  2");
 			Estado estado=(Estado)consulta2.getSingleResult();
 			estado.addPeticion(peticion);
 		
-			Query consulta3=entitymanager.createQuery("SELECT e FROM Estado e WHERE e.idEstado =  2");
+			Query consulta3=entitymanager.createQuery("SELECT e FROM Estado e WHERE e.idEstado =  1");
 			Estado estado2=(Estado)consulta3.getSingleResult();
 			estado2.removePeticion(peticion);
 		
+			mailReceptor=peticion.getUsuario().getEmailUsuario();
+	        Properties props = new Properties();
+	        props.put("mail.smtp.user", miCorreo);
+	        props.put("mail.smtp.host", servidorSMTP);
+	        props.put("mail.smtp.port", puertoEnvio);
+	        props.put("mail.smtp.starttls.enable", "true");
+	        props.put("mail.smtp.auth", "true");
+	        props.put("mail.smtp.socketFactory.port", puertoEnvio);
+	        props.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
+	        props.put("mail.smtp.socketFactory.fallback", "false");
+	        props.put("mail.smtp.starttls.enable","false" );
+
+	        SecurityManager security = System.getSecurityManager();
+	        try {
+	            Authenticator auth = new autentificadorSMTP();
+	            Session session = Session.getInstance(props, auth);
+	            // session.setDebug(true);
+				//Store store = session.getStore("smtp");
+				//store.connect(servidorSMTP, miCorreo, miContraseña);
+	            MimeMessage msg = new MimeMessage(session);
+	            msg.setText(cuerpo);
+	            BodyPart adjunto = new MimeBodyPart();
+	            
+	            adjunto.setDataHandler(new DataHandler(new FileDataSource("D:\\tmp\\"+nombre)));
+	            System.out.println(nombre);
+	            adjunto.setFileName(nombre);
+	            
+	            msg.setSubject(asunto);
+	            msg.setFrom(new InternetAddress(miCorreo));
+	            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(mailReceptor));
+	            
+	            MimeMultipart multiParte = new MimeMultipart();
+	            //multiParte.addBodyPart(adjunto);
+	            multiParte.addBodyPart(adjunto);
+	            msg.setContent(multiParte);
+	            
+	            Transport.send(msg);
+	            //Transport.send(adjunto);
+	        }catch (Exception mex) {
+	            mex.printStackTrace();
+	        }
+			//javax.mail.SendFailedException: Send failure (javax.mail.MessagingException: Connection error (java.io.IOException: Error connecting to smtp.gmail.com, 465))
+			
+			
 			peticion.setEstado(estado);
 		
 			entitymanager.getTransaction().begin();
@@ -143,5 +218,9 @@ public class GestionAdministrador {
 		return be.pieModel;
 	}
 	
-	
+	private class autentificadorSMTP extends javax.mail.Authenticator {
+        public PasswordAuthentication getPasswordAuthentication() {
+            return new PasswordAuthentication(miCorreo, miContraseña);
+        }
+    }
 }

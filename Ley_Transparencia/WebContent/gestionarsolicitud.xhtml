@@ -13,25 +13,26 @@
 <h:body>
 	<center><img src="logoucatolica.png"/></center>
 	<h:form  prependId="false" enctype="multipart/form-data">
-		<center>	
-			<p:tabMenu activeIndex="#{beanGestionarSoli.i}">
-    			<p:menuitem value="#{beanGestionarSoli.opcion1}" icon="ui-icon-star" url="menugestionador.xhtml">
-        			<f:param name="i" value="0" />
-    			</p:menuitem>
-	    		<p:menuitem value="#{beanGestionarSoli.opcion2}" icon="ui-icon-search" url="solicitudes.xhtml">
-        			<f:param name="i" value="1" />
-    			</p:menuitem>
-    			<p:menuitem value="#{beanGestionarSoli.opcion3}" icon="ui-icon-document">
-       				<f:param name="i" value="2" />
-   				</p:menuitem>
-   				<p:menuitem value="#{beanGestionarSoli.opcion4}" icon="ui-icon-document" url="estadisticos.xhtml">
+		<center>
+			<div id="div">	
+				<p:tabMenu activeIndex="#{beanGestionarSoli.i}">
+    				<p:menuitem value="#{beanGestionarSoli.opcion1}" icon="ui-icon-star" url="menugestionador.xhtml">
+        				<f:param name="i" value="0" />
+    				</p:menuitem>
+	    			<p:menuitem value="#{beanGestionarSoli.opcion2}" icon="ui-icon-search" url="solicitudes.xhtml">
+        				<f:param name="i" value="1" />
+    				</p:menuitem>
+    				<p:menuitem value="#{beanGestionarSoli.opcion3}" icon="ui-icon-document">
+       					<f:param name="i" value="2" />
+   					</p:menuitem>
+   					<p:menuitem value="#{beanGestionarSoli.opcion4}" icon="ui-icon-document" url="estadisticos.xhtml">
         				<f:param name="i" value="3" />
     				</p:menuitem>
     				<p:menuitem value="#{beanGestionarSoli.opcion5}" icon="ui-icon-document" url="index.xhtml">
         				<f:param name="i" value="4" />
         			</p:menuitem>
-			</p:tabMenu>
-			
+				</p:tabMenu>
+			</div>
 			<h1 id="titulo">GESTIONAR SOLICITUD</h1>
 		
 			<H2>

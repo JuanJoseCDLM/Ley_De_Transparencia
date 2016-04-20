@@ -7,43 +7,62 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	<link type="text/css" rel="stylesheet" href="dise_registrarsolicitud.css" />
+	<link type="text/css" rel="stylesheet" href="dise_gestionar.css" />
 </h:head>
 <h:body>
 	<center>
 		<img src="logoucatolica.png" />
 	</center>
 	<h:form>
-		<p:tabMenu activeIndex="#{beanSolicitud.i}">
-			<p:menuitem value="#{beanSolicitud.opcion1}" icon="ui-icon-star" url="menugestionador.xhtml">
-        		<f:param name="i" value="0" />
-    		</p:menuitem>
-    		<p:menuitem value="#{beanSolicitud.opcion2}"  icon="ui-icon-search" url="solicitudes.xhtml" >
-        		<f:param name="i" value="1" />
-    		</p:menuitem>
-    		<p:menuitem value="#{beanSolicitud.opcion3}" icon="ui-icon-document" url="gestionarsolicitud.xhtml">
-        		<f:param name="i" value="2" />
-    		</p:menuitem>
-    		<p:menuitem value="#{beanSolicitud.opcion4}" icon="ui-icon-document" url="estadisticos.xhtml">
-        		<f:param name="i" value="3" />
-    		</p:menuitem>
-    		<p:menuitem value="#{beanSolicitud.opcion5}" icon="ui-icon-document" url="index.xhtml">
+		<center>
+			<div id="div">
+				<p:tabMenu activeIndex="#{beanSolicitud.i}">
+					<p:menuitem value="#{beanSolicitud.opcion1}" icon="ui-icon-star" url="menugestionador.xhtml">
+        				<f:param name="i" value="0" />
+    				</p:menuitem>
+    				<p:menuitem value="#{beanSolicitud.opcion2}"  icon="ui-icon-search" url="solicitudes.xhtml" >
+        				<f:param name="i" value="1" />
+    				</p:menuitem>
+    				<p:menuitem value="#{beanSolicitud.opcion3}" icon="ui-icon-document" url="gestionarsolicitud.xhtml">
+        				<f:param name="i" value="2" />
+    				</p:menuitem>
+    				<p:menuitem value="#{beanSolicitud.opcion4}" icon="ui-icon-document" url="estadisticos.xhtml">
+        				<f:param name="i" value="3" />
+    				</p:menuitem>
+    				<p:menuitem value="#{beanSolicitud.opcion5}" icon="ui-icon-document" url="index.xhtml">
         				<f:param name="i" value="4" />
-        	</p:menuitem>	
-		</p:tabMenu>
-				
-		<p:dataList id="aa" value="#{beanSolicitud.lista}" var="car" widgetVar="carDialog" modal="true" showEffect="blind" hideEffect="explode" resizable="false">
-			<f:facet name="header">
-        		Solicitudes
-        	</f:facet>
-        	<table>
-        		<tr>
-        			<td>#{car.idPeticion}      </td>      <td>#{car.fechaPeticion}      </td>      <td>      #{car.estado.tipoEstado}</td>
-        		</tr>
-        	</table>
-    	</p:dataList>  
-	
-	</h:form>
-	
+        			</p:menuitem>	
+				</p:tabMenu>
+			</div>
+						
+			<br></br>
+			<br></br>
+			<br></br>
+			
+    		<p:dataTable id="aa" value="#{beanSolicitud.lista}" var="car" style="width:70%;">
+    			<f:facet name="header">
+        			Solicitudes
+        		</f:facet>
+				<p:column headerText="Id" style="width:10px;">
+					<center>
+						<h:outputText value="#{car.idPeticion}" />
+					</center>
+				</p:column>
+			
+				<p:column headerText="Fecha de solicitud" width="40px">
+					<center>
+						<h:outputText value="#{car.fechaPeticion}" />
+					</center>
+				</p:column>
+			
+				<p:column headerText="Estado de solicitud" width="20px">
+					<center>
+						<h:outputText value="#{car.estado.tipoEstado}" />
+					</center>
+				</p:column>				
+			</p:dataTable>
+    	
+    	</center>	
+	</h:form>	
 </h:body>
 </html>

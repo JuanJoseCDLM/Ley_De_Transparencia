@@ -11,64 +11,86 @@
 	<title>DerechoDePEticion</title>
 </h:head> 
 <h:body>
-	<center><img src="logoucatolica.png"/></center>
-	
-	
+	<center><img src="logoucatolica.png"/></center>	
 	<h:form>
-		<p:breadCrumb>
-    		<p:menuitem value="#{beanConsultaCiudadana.opcion1}" url="menu.xhtml">
-       			<f:param name="i" value="0" />
-    		</p:menuitem>
-    		<p:menuitem value="#{beanConsultaCiudadana.opcion1}" url="menu.xhtml">
-       			<f:param name="i" value="0" />
-    		</p:menuitem>
-    		<p:menuitem value="#{beanConsultaCiudadana.opcion2}" url="registrarsolicitud.xhtml">
-       			<f:param name="i" value="1" />
-    		</p:menuitem>
-    		<p:menuitem value="#{beanConsultaCiudadana.opcion3}" url="consultaciudadana.xhtml">
-       			<f:param name="i" value="2" />
-    		</p:menuitem>
-    		<p:menuitem value="#{beanConsultaCiudadana.opcion4}" url="registrarreposicion.xhtml">
-       			<f:param name="i" value="3" />
-    		</p:menuitem>
-		</p:breadCrumb>
-			
+		<center>
+			<div id="div">
+				<p:breadCrumb>
+    				<p:menuitem value="#{beanConsultaCiudadana.opcion1}" url="menu.xhtml">
+       					<f:param name="i" value="0" />
+    				</p:menuitem>
+    				<p:menuitem value="#{beanConsultaCiudadana.opcion1}" url="menu.xhtml">
+       					<f:param name="i" value="0" />
+    				</p:menuitem>
+    				<p:menuitem value="#{beanConsultaCiudadana.opcion2}" url="registrarsolicitud.xhtml">
+       					<f:param name="i" value="1" />
+    				</p:menuitem>
+    				<p:menuitem value="#{beanConsultaCiudadana.opcion3}" url="consultaciudadana.xhtml">
+       					<f:param name="i" value="2" />
+    				</p:menuitem>
+    				<p:menuitem value="#{beanConsultaCiudadana.opcion4}" url="registrarreposicion.xhtml">
+       					<f:param name="i" value="3" />
+    				</p:menuitem>
+    				<p:menuitem value="#{beanConsultaCiudadana.opcion5}" action="#{beanConsultaCiudadana.cerrarsesion()}">
+        				<f:param name="i" value="4" />
+    				</p:menuitem>
+				</p:breadCrumb>
+			</div>
 		<br></br>
 		<br></br>	
-			
-		<div class="izquierdo"><p:outputLabel styleClass="datos1" value="#{beanConsultaCiudadana.emailsolicitante}"></p:outputLabel></div>
-		<div class="centro"><p:outputLabel styleClass="datos2" value="#{beanConsultaCiudadana.direccionsolicitante}"></p:outputLabel></div>
-		<div class="derecho"><p:outputLabel styleClass="datos3" value="#{beanConsultaCiudadana.celularsolicitante}"></p:outputLabel></div>
+		<br></br>
+		<br></br>		
+		<div class="centro">			
+			<table>			
+				<tr>
+					<td><strong><p:outputLabel styleClass="datos1" value="#{beanConsultaCiudadana.emailsolicitante}"> |</p:outputLabel></strong></td>
+					<td><strong><p:outputLabel styleClass="datos2" value="#{beanConsultaCiudadana.direccionsolicitante}"> |</p:outputLabel></strong></td>
+					<td><strong><p:outputLabel styleClass="datos3" value="#{beanConsultaCiudadana.celularsolicitante}"></p:outputLabel></strong></td>
+				</tr>
+			</table>
+		</div>
 		
 		<br></br>
 		<br></br>
 			
-		<p:dataList id="aa" value="#{beanConsultaCiudadana.lista}" var="car" >
-			<f:facet name="header">
-           		Solicitudes
-       		</f:facet>
-       		
-       		<table>
-       			<tr>
-       				<td>#{car.idPeticion}      </td>      <td>#{car.fechaPeticion}      </td>      <td>      #{car.estado.tipoEstado}</td>
-       				<td class="color"><p:growl id="growl" life="2000" />
-       						<p:commandButton value="Download" id="ajax" update="growl" action="#{beanConsultaCiudadana.FileDownloadView(car.idPeticion)}" onclick="PrimeFaces.monitorDownload(start, stop);"  >
-        						
-        						<p:fileDownload value="#{beanConsultaCiudadana.file}" />
-    						</p:commandButton>
-    						<script type="text/javascript">
-function start() {
-    PF('statusDialog').show();
-}
- 
-function stop() {
-    PF('statusDialog').hide();
-}
-</script></td>
-       			</tr>
-       		</table>
-    	</p:dataList>
-		
+		<p:dataTable id="aa" value="#{beanConsultaCiudadana.lista}" var="car" style="width:70%;">
+			
+			<p:column headerText="Numero de registro" style="width:5px;" >
+				<center>
+					<h:outputText value="#{car.idPeticion}" />
+				</center>
+			</p:column>
+			
+			<p:column headerText="Fecha de solicitud" style="width:45px;">
+				<center>
+					<h:outputText value="#{car.fechaPeticion}" />
+				</center>
+			</p:column>
+			
+			<p:column headerText="Estado de solicitud" style="width:35px;">
+				<center>
+					<h:outputText value="#{car.estado.tipoEstado}" />
+				</center>
+			</p:column>
+			
+			<p:column headerText="Descarga" style="width:15px;">
+				<center>
+					<h:commandButton value="Download" id="ajax" update="growl" action="#{beanConsultaCiudadana.FileDownloadView(car.idPeticion)}" onclick="PrimeFaces.monitorDownload(start);"  >
+					<p:fileDownload value="#{beanConsultaCiudadana.file}" />
+					<script type="text/javascript">
+						function start() {
+    						PF('statusDialog').show();
+						}
+						function stop() {
+    						PF('statusDialog').hide();
+						}
+					</script>
+    				</h:commandButton>
+    			</center>
+			</p:column>
+			
+		</p:dataTable>		
+		</center>
 	</h:form>	
 </h:body> 
 </html>

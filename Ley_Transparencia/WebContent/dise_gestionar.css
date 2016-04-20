@@ -25,6 +25,8 @@
 }
 
 #div{
-	float: center;
-	width: 50%;
+	float: left;
+	width: 63%;
+	margin-left: 17%;
+	margin-right: 17%;
 }

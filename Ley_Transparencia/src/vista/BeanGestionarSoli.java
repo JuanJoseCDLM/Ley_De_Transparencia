@@ -35,6 +35,7 @@ import controlador.GestionAdministrador;
 public class BeanGestionarSoli implements Serializable{
 	private String destination="D:\\tmp\\";
 	private static final long serialVersionUID = 8L;
+	String nombrearchivo;
 	
 	private int i=2;
 	
@@ -238,11 +239,14 @@ public class BeanGestionarSoli implements Serializable{
         }
     }
 	
-	public void manejararchivos(String peticion) {
-		ExternalContext extContext =FacesContext.getCurrentInstance().getExternalContext();
+	public String manejararchivos(String peticion) {
+		//ExternalContext extContext ="D:\\tmp\\";		
 		int tamano=file.getFileName().length();
-		File resultado = new File(extContext.getRealPath(peticion+"peticion"+file.getFileName().subSequence(tamano-4, tamano)));
-		System.out.println(extContext.getRealPath(file.getFileName()));
+		nombrearchivo = peticion+"peticion"+file.getFileName().subSequence(tamano-4, tamano);
+		File resultado = new File("D:\\tmp\\"+peticion+"peticion"+file.getFileName().subSequence(tamano-4, tamano));
+		//System.out.println(resultado);
+		GestionAdministrador ga = new GestionAdministrador();
+		ga.ruta2 = peticion+"peticion"+file.getFileName().subSequence(tamano-4, tamano);
 		try {
 			FileOutputStream fileOutputStream = new FileOutputStream(resultado);
 			byte[] tamaño = new byte[tamaño_archivo];
@@ -259,7 +263,7 @@ public class BeanGestionarSoli implements Serializable{
 
 			fileOutputStream.close();
 			inputStream.close();			
-			System.out.println(file.getSize()+" tamaño"+file.getContentType()+"tipo");
+			//System.out.println(file.getSize()+" tamaño"+file.getContentType()+"tipo");
 			FacesMessage msg =new FacesMessage("Descripcion del archivo", "Nombre del archivo: " +
 			file.getFileName() +"\n Tamaño del archivo: " +
 			file.getSize() / 1024 +"\n Tipo: " + file.getContentType() +
@@ -271,7 +275,9 @@ public class BeanGestionarSoli implements Serializable{
 			e.printStackTrace();
 			FacesMessage error = new FacesMessage(FacesMessage.SEVERITY_ERROR,"EL ARCHIVO NO SE SUBIO!!!!", "");
 			FacesContext.getCurrentInstance().addMessage(null, error);
-		}      
+		}
+		
+		return nombrearchivo;
 	}
 	
 	public String RealizarCambio(){
@@ -283,7 +289,7 @@ public class BeanGestionarSoli implements Serializable{
 			if(controladorArchivos.tamanoArchivo(file) && controladorArchivos.Reconocer_formato(file)){
 				manejararchivos(peticion);
 				System.out.println(peticion);
-				gestionAdministrador.Cambiar_estado_de_la_petición_en_caso_de_recibir_documento(peticion);			
+				gestionAdministrador.Cambiar_estado_de_la_petición_en_caso_de_recibir_documento(peticion, nombrearchivo);			
 				//peticioness.remove(peticion);
 			
 				return "solicitudes.xhtml";
@@ -300,7 +306,7 @@ public class BeanGestionarSoli implements Serializable{
 					System.out.println(peticion);
 					gestionAdministrador.Cambiar_estado_de_la_petición_en_caso_de_rechazo(peticion);
 					//peticioness.remove(peticion);
-					{return "solicitudes.xhtml";}
+					return "solicitudes.xhtml";
 				}
 				else{
 					return "solicitudes.xhtml";

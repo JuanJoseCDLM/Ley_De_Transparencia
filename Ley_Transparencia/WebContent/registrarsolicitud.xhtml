@@ -31,15 +31,24 @@
     		<p:menuitem value="#{beanRegistrarSolicitud.opcion4}" url="registrarreposicion.xhtml">
         		<f:param name="i" value="3" />
     		</p:menuitem>
+    		<p:menuitem value="#{beanRegistrarSolicitud.opcion5}" action="#{beanConsultaCiudadana.cerrarsesion()}">
+        		<f:param name="i" value="4" />
+    		</p:menuitem>
 		</p:breadCrumb>
 		</div>
 		<h1 id="nota">Los datos que tengan * son de carácter obligatorio.</h1>
 		
 		
 		
-		<div class="izquierdo"><p:outputLabel styleClass="datos1" value="#{beanRegistrarSolicitud.emailsolicitante}"></p:outputLabel></div>
-		<div class="centro"><p:outputLabel styleClass="datos2" value="#{beanRegistrarSolicitud.direccionsolicitante}"></p:outputLabel></div>
-		<div class="derecho"><p:outputLabel styleClass="datos3" value="#{beanRegistrarSolicitud.celularsolicitante}"></p:outputLabel></div>
+		<div class="centro">			
+			<table>			
+				<tr>
+					<td><strong><p:outputLabel styleClass="datos1" value="#{beanRegistrarSolicitud.emailsolicitante}"> | </p:outputLabel></strong></td>					
+					<td><strong><p:outputLabel styleClass="datos2" value="#{beanRegistrarSolicitud.direccionsolicitante}"> | </p:outputLabel></strong></td>					
+					<td><strong><p:outputLabel styleClass="datos3" value="#{beanRegistrarSolicitud.celularsolicitante}"></p:outputLabel></strong></td>
+				</tr>
+			</table>			
+		</div>
 		
 	
 		<br></br>
@@ -62,11 +71,7 @@
         				<f:selectItems value="#{beanRegistrarSolicitud.tipos}" />
         			</p:selectOneMenu>
 				
-				<p:outputLabel styleClass="msj5" value="#{beanRegistrarSolicitud.textlabelaño}"></p:outputLabel>
-        			<p:selectOneMenu value="#{beanRegistrarSolicitud.año}" style="width:200px">
-        				<f:selectItem itemLabel="Seleccionar año" itemValue="" noSelectionOption="true" />
-        				<f:selectItems value="#{beanRegistrarSolicitud.años}" />
-        			</p:selectOneMenu>
+				
         
         		<p:outputLabel styleClass="msj6" value="#{beanRegistrarSolicitud.textlabelarea}"></p:outputLabel>
         			<p:selectOneMenu value="#{beanRegistrarSolicitud.area}" style="width:200px">

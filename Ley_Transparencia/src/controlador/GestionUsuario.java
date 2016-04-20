@@ -37,21 +37,6 @@ import javax.persistence.Persistence;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
-/*import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.dom4j.DocumentException;*/
-
-
-
-
-
-
-
-
-
-
 import vista.BeanConsultaCiudadana;
 import vista.BeanGestionarSoli;
 import vista.BeanIndex;
@@ -94,8 +79,7 @@ public class GestionUsuario {
 			usuario = (Usuario) consulta.getSingleResult();
 			System.out.println(consulta);
 		}catch(NoResultException e){			
-			BeanRegistrarSolicitud bs = new BeanRegistrarSolicitud();
-			
+			BeanRegistrarSolicitud bs = new BeanRegistrarSolicitud();			
 			usuario.setCedulaUsuario(cedula);
 			usuario.setNombreUsuario(nombre);
 			usuario.setApellidoUsuario(apellido);
@@ -109,6 +93,32 @@ public class GestionUsuario {
 			usuario.setEstadoUsuario(true);
 			bs.nombre=usuario.getNombreUsuario();
 			bs.apellido=usuario.getApellidoUsuario();
+			
+			BeanMenu bm = new BeanMenu();
+			bm.email=usuario.getEmailUsuario();
+			bm.direccion=usuario.getDireccionUsuario();
+			bm.celular=usuario.getCelularUsuario();
+
+			
+			bs.direccion = usuario.getDireccionUsuario();
+			bs.email = usuario.getEmailUsuario();
+			bs.celular = usuario.getCelularUsuario();
+			bs.nombre = usuario.getNombreUsuario();
+			bs.apellido = usuario.getApellidoUsuario();
+			bs.cedula = usuario.getCedulaUsuario();
+			
+			BeanConsultaCiudadana bcc= new BeanConsultaCiudadana();
+			bcc.cedula=usuario.getCedulaUsuario();
+			bcc.email = usuario.getEmailUsuario();
+			bcc.direccion = usuario.getDireccionUsuario();
+			bcc.celular = usuario.getCelularUsuario();
+			
+			BeanRegistrarReposicion brr = new BeanRegistrarReposicion();
+			brr.cedula=usuario.getCedulaUsuario();
+			brr.email = usuario.getEmailUsuario();
+			brr.direccion = usuario.getDireccionUsuario();
+			brr.celular = usuario.getCelularUsuario();
+			
 			entitymanager.getTransaction().begin();
 			entitymanager.persist(usuario);
 			entitymanager.getTransaction().commit();			
@@ -124,7 +134,9 @@ public class GestionUsuario {
 			BeanRegistrarSolicitud bs = new BeanRegistrarSolicitud();
 			
 			BeanMenu bm = new BeanMenu();
-			bm.a=Integer.toString(usuario.getCedulaUsuario());
+			bm.email=usuario.getEmailUsuario();
+			bm.direccion=usuario.getDireccionUsuario();
+			bm.celular=usuario.getCelularUsuario();
 
 			
 			bs.direccion = usuario.getDireccionUsuario();
@@ -218,6 +230,7 @@ public class GestionUsuario {
 							peticion.setFechaPeticion(fecha);
 							peticion.setObservacionesPeticion(observaciones);
 							peticion.setEstadoPeticion(true);
+							peticion.setReposicion(true);
 							peticion.setEstado(listaestados);
 							peticion.setEmpresa(listaempresa);
 							peticion.setUsuario(listausuario);

@@ -94,7 +94,9 @@ public String iniciarsesion(){
 		//aqui busca si existe un usuario 
 		if(gestionarsolicitante.AutenticarSolicitante(login, password).getClass().getName().equals("modelo.Usuario")){
 			BeanMenu bn = new BeanMenu();
-			bn.a=login;
+			//bn.email = gestionarsolicitante.getClass().getName(
+			//bn.direccion
+			//bn.celular
 			//System.out.println(gestionarsolicitante.AutenticarSolicitante(login, password).getClass().getName());
 			return "menu.xhtml";
 		}

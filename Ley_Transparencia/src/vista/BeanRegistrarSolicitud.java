@@ -23,6 +23,8 @@ import javax.faces.context.FacesContext;
 
 
 
+
+
 //import org.dom4j.DocumentException;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -39,6 +41,7 @@ public class BeanRegistrarSolicitud implements Serializable{
 	private String opcion2="Realizar petición";
 	private String opcion3="Consulta ciudadana";
 	private String opcion4="Reposición";
+	private String opcion5="Cerrar Sesion";
 	
 	private String textlabelentidad="Entidad:*";
 	private String textlabelnombre="Nombre:";
@@ -87,6 +90,14 @@ public class BeanRegistrarSolicitud implements Serializable{
 	
 	public String getOpcion1() {
 		return opcion1;
+	}
+
+	public String getOpcion5() {
+		return opcion5;
+	}
+
+	public void setOpcion5(String opcion5) {
+		this.opcion5 = opcion5;
 	}
 
 	public void setOpcion1(String opcion1) {
@@ -423,5 +434,30 @@ public class BeanRegistrarSolicitud implements Serializable{
         if(file != null)
         	return file;
         return null;
+    }
+    
+    public String cerrarsesion(){
+    	BeanMenu bm = new BeanMenu();
+		bm.email=null;
+		bm.direccion=null;
+
+		BeanRegistrarSolicitud bs = new BeanRegistrarSolicitud();
+		bs.direccion = null;
+		bs.email = null;
+		bs.nombre = null;
+		bs.apellido = null;
+		bs.cedula = 0;
+		
+		BeanConsultaCiudadana bcc= new BeanConsultaCiudadana();
+		bcc.cedula = 0;
+		bcc.email = null;
+		bcc.direccion = null;
+		
+		BeanRegistrarReposicion brr = new BeanRegistrarReposicion();
+		brr.cedula=0;
+		brr.email = null;
+		brr.direccion = null;
+		brr.celular = null;
+    	return "index.xhtml";
     }
 }

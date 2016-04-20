@@ -3,12 +3,14 @@ package vista;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
@@ -24,11 +26,13 @@ import modelo.Peticion;
 @ViewScoped
 public class BeanConsultaCiudadana implements Serializable{
 	
+	transient BeanConsultaCiudadana BeanConsultaCiudadan;
 	private static final long serialVersionUID = 1L;
 	private String opcion1="¿Quienes somos?";
 	private String opcion2="Realizar petición";
 	private String opcion3="Consulta ciudadana";
 	private String opcion4="Reposición";
+	private String opcion5="Cerrar Sesion";
 	private String emailsolicitante="";
 	private String direccionsolicitante="";
 	private BigInteger celularsolicitante;
@@ -37,7 +41,17 @@ public class BeanConsultaCiudadana implements Serializable{
 	public static String direccion;
 	public static BigInteger celular;
 	public static int cedula;
+	String[] arrglos={"zip","rar","tgz","png","jpg","gif","xls","dot","pdf"};
 	
+	
+	public String getOpcion5() {
+		return opcion5;
+	}
+
+	public void setOpcion5(String opcion5) {
+		this.opcion5 = opcion5;
+	}
+
 	public List<Peticion> getLista() {
 		return lista;
 	}
@@ -113,32 +127,68 @@ public class BeanConsultaCiudadana implements Serializable{
 	
 	private StreamedContent file;
     
-    public Object FileDownloadView(String idformulario){        
+    public Object FileDownloadView(String idformulario) throws IOException{        
         System.out.println(idformulario);
-    	InputStream stream1 = null;
-    	// Aquí la carpeta donde queremos buscar
-    	String Fichero = "C:\\Users\\JuanJose\\Documents\\Alumno.zip";
-    	File fichero = new File(Fichero);
-
-    	if (fichero.exists()){
-    		  System.out.println("El fichero " + Fichero + " existe");
-    		  try {
-    				stream1 = new FileInputStream("C:\\Users\\JuanJose\\Documents\\Alumno.zip");
-    				file = new DefaultStreamedContent(stream1, "text/zip", "optimus.zip");
+        InputStream stream1 = null;
+    	// Aquí la carpeta donde queremos buscar    	
+    	String nombre;
+    	for(int i=0;i<=8;i++){    		
+			nombre=idformulario+"peticion."+arrglos[i];
+			String Fichero = "D:\\tmp\\"+nombre;
+	    	File fichero = new File(Fichero);
+	    	//stream1 = new FileInputStream(fichero);
+    		if (fichero.exists()){
+    			System.out.println("El fichero " + Fichero + " existe");
+    			try {
+    				stream1 = new FileInputStream(fichero);
+					file = new DefaultStreamedContent(stream1, "image/"+arrglos[i], nombre);
+					System.out.println("El fichero " + Fichero + " se descargo");
+					//
+					return file;
     			} catch (FileNotFoundException e){
+    				System.out.println("Frfregtrgtrt");
     				// TODO Auto-generated catch block
-    				e.printStackTrace();
+    				e.printStackTrace();    				
+    				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error","El archivo no se encuentra."));
+    				return null;
     			}
-    	        System.out.println(stream1);        
-    	        System.out.println(file);
-    	        return file;
-    	}
-    	else
-    	    System.out.println("Pues va a ser que no");       
-		return null;
+    	        	
+    		}
+    		else{
+    			//stream1.close();
+    			System.out.println("El fichero " + Fichero + " no existe");
+    		}
+        }
+    	//stream1.close();
+    	return null;
     }
  
     public StreamedContent getFile() {
         return file;
+    }
+    
+    public String cerrarsesion(){
+    	BeanMenu bm = new BeanMenu();
+		bm.email=null;
+		bm.direccion=null;
+
+		BeanRegistrarSolicitud bs = new BeanRegistrarSolicitud();
+		bs.direccion = null;
+		bs.email = null;
+		bs.nombre = null;
+		bs.apellido = null;
+		bs.cedula = 0;
+		
+		BeanConsultaCiudadana bcc= new BeanConsultaCiudadana();
+		bcc.cedula = 0;
+		bcc.email = null;
+		bcc.direccion = null;
+		
+		BeanRegistrarReposicion brr = new BeanRegistrarReposicion();
+		brr.cedula=0;
+		brr.email = null;
+		brr.direccion = null;
+		brr.celular = null;
+    	return "index.xhtml";
     }
 }

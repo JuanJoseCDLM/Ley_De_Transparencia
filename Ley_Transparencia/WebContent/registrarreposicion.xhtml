@@ -14,31 +14,45 @@
 	<center><img src="logoucatolica.png"/></center>
 	
 	
-	<h:form><center>
-		<p:breadCrumb>
-    		<p:menuitem value="#{beanRegistrarReposicion.opcion1}" url="menu.xhtml">
-       			<f:param name="i" value="0" />
-    		</p:menuitem>
-    		<p:menuitem value="#{beanRegistrarReposicion.opcion1}" url="menu.xhtml">
-       			<f:param name="i" value="0" />
-    		</p:menuitem>
-    		<p:menuitem value="#{beanRegistrarReposicion.opcion2}" url="registrarsolicitud.xhtml">
-       			<f:param name="i" value="1" />
-    		</p:menuitem>
-    		<p:menuitem value="#{beanRegistrarReposicion.opcion3}" url="consultaciudadana.xhtml">
-       			<f:param name="i" value="2" />
-    		</p:menuitem>
-    		<p:menuitem value="#{beanRegistrarReposicion.opcion4}" url="registrarreposicion.xhtml">
-       			<f:param name="i" value="3" />
-    		</p:menuitem>
-		</p:breadCrumb>
-			
+	<h:form>
+		<center>
+			<div id="div">
+				<p:breadCrumb>
+    				<p:menuitem value="#{beanRegistrarReposicion.opcion1}" url="menu.xhtml">
+       					<f:param name="i" value="0" />
+    				</p:menuitem>
+    				<p:menuitem value="#{beanRegistrarReposicion.opcion1}" url="menu.xhtml">
+       					<f:param name="i" value="0" />
+    				</p:menuitem>
+    				<p:menuitem value="#{beanRegistrarReposicion.opcion2}" url="registrarsolicitud.xhtml">
+       					<f:param name="i" value="1" />
+    				</p:menuitem>
+    				<p:menuitem value="#{beanRegistrarReposicion.opcion3}" url="consultaciudadana.xhtml">
+       					<f:param name="i" value="2" />
+    				</p:menuitem>
+    				<p:menuitem value="#{beanRegistrarReposicion.opcion4}" url="registrarreposicion.xhtml">
+       					<f:param name="i" value="3" />
+    				</p:menuitem>
+    				<p:menuitem value="#{beanRegistrarReposicion.opcion5}" action="#{beanConsultaCiudadana.cerrarsesion()}">
+        				<f:param name="i" value="4" />
+    				</p:menuitem>
+				</p:breadCrumb>
+			</div>		
 		<br></br>
 		<br></br><h1 id="nota">Los datos que tengan * son de carácter obligatorio.</h1>
 		
-		<div class="izquierdo"><p:outputLabel styleClass="datos1" value="#{beanRegistrarReposicion.emailsolicitante}"></p:outputLabel></div>
-		<div class="centro"><p:outputLabel styleClass="datos2" value="#{beanRegistrarReposicion.direccionsolicitante}"></p:outputLabel></div>
-		<div class="derecho"><p:outputLabel styleClass="datos3" value="#{beanRegistrarReposicion.celularsolicitante}"></p:outputLabel></div>
+		
+		
+		
+		<div class="centro">			
+			<table>			
+				<tr>
+					<td><strong><p:outputLabel styleClass="datos1" value="#{beanRegistrarReposicion.emailsolicitante}"> |</p:outputLabel></strong></td>
+					<td><strong><p:outputLabel styleClass="datos2" value="#{beanRegistrarReposicion.direccionsolicitante}"> |</p:outputLabel></strong></td>
+					<td><strong><p:outputLabel styleClass="datos3" value="#{beanRegistrarReposicion.celularsolicitante}"></p:outputLabel></strong></td>
+				</tr>
+			</table>
+		</div>
 		
 		<br></br>
 		<br></br>
@@ -67,11 +81,7 @@
         				<f:selectItems value="#{beanRegistrarReposicion.tipos}" />
         			</p:selectOneMenu>
 				
-				<p:outputLabel styleClass="msj5" value="#{beanRegistrarReposicion.textlabelaño}"></p:outputLabel>
-        			<p:selectOneMenu value="#{beanRegistrarReposicion.año}" style="width:200px">
-        				<f:selectItem itemLabel="Seleccionar año" itemValue="" noSelectionOption="true" />
-        				<f:selectItems value="#{beanRegistrarReposicion.años}" />
-        			</p:selectOneMenu>
+				
         
         		<p:outputLabel styleClass="msj6" value="#{beanRegistrarReposicion.textlabelarea}"></p:outputLabel>
         			<p:selectOneMenu value="#{beanRegistrarReposicion.area}" style="width:200px">

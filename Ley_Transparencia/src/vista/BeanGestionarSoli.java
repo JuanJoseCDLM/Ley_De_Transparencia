@@ -19,6 +19,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FilenameUtils;
 import org.primefaces.event.FileUploadEvent;
@@ -269,7 +270,8 @@ public class BeanGestionarSoli implements Serializable{
 			file.getSize() / 1024 +"\n Tipo: " + file.getContentType() +
 			"\\n EL ARCHIVO SE GUARDO CON EXITO!!!!!");
 
-			FacesContext.getCurrentInstance().addMessage(null, msg);
+			//FacesContext.getCurrentInstance().addMessage(null, msg);
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "PrimeFaces Rocks."));
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -291,6 +293,8 @@ public class BeanGestionarSoli implements Serializable{
 				System.out.println(peticion);
 				gestionAdministrador.Cambiar_estado_de_la_petición_en_caso_de_recibir_documento(peticion, nombrearchivo);			
 				//peticioness.remove(peticion);
+				
+				saveMessage();
 			
 				return "solicitudes.xhtml";
 			}
@@ -316,4 +320,40 @@ public class BeanGestionarSoli implements Serializable{
 				{return "solicitudes.xhtml";}			
 		}
 	}
+	
+	public String cerrarsesion(){
+    	BeanMenu bm = new BeanMenu();
+		bm.email=null;
+		bm.direccion=null;
+
+		BeanRegistrarSolicitud bs = new BeanRegistrarSolicitud();
+		bs.direccion = null;
+		bs.email = null;
+		bs.nombre = null;
+		bs.apellido = null;
+		bs.cedula = 0;
+		
+		BeanConsultaCiudadana bcc= new BeanConsultaCiudadana();
+		bcc.cedula = 0;
+		bcc.email = null;
+		bcc.direccion = null;
+		
+		BeanRegistrarReposicion brr = new BeanRegistrarReposicion();
+		brr.cedula=0;
+		brr.email = null;
+		brr.direccion = null;
+		brr.celular = null;
+		
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+        if (session != null) {
+            session.invalidate(); //Cierre de sesion
+        }
+        return "index.xhtml";    	
+    }
+	
+	public void saveMessage() {
+        FacesContext context = FacesContext.getCurrentInstance();         
+        context.addMessage(null, new FacesMessage("Successful",  "Mensaje enviado exitosamente.") );       
+    }
 }

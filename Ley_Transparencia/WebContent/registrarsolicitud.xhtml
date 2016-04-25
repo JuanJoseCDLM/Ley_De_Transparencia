@@ -31,7 +31,7 @@
     		<p:menuitem value="#{beanRegistrarSolicitud.opcion4}" url="registrarreposicion.xhtml">
         		<f:param name="i" value="3" />
     		</p:menuitem>
-    		<p:menuitem value="#{beanRegistrarSolicitud.opcion5}" action="#{beanConsultaCiudadana.cerrarsesion()}">
+    		<p:menuitem value="#{beanRegistrarSolicitud.opcion5}" action="#{beanRegistrarSolicitud.cerrarsesion()}">
         		<f:param name="i" value="4" />
     		</p:menuitem>
 		</p:breadCrumb>
@@ -117,7 +117,7 @@
     	</p:commandButton>
 	   	<br />
 		<br />
-		<p:commandButton styleClass="enviar" value="#{beanRegistrarSolicitud.textbotonenviar}" action="#{beanRegistrarSolicitud.registrar_peticion()}"/>
+		<p:commandButton styleClass="enviar" value="#{beanRegistrarSolicitud.textbotonenviar}" action="#{beanRegistrarSolicitud.registrar_peticion()}" actionListener="#{beanRegistrarSolicitud.saveMessage()}"/>
 	</center></h:form>
 	<br />
 	<br />	

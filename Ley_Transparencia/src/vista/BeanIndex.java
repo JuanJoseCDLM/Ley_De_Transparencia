@@ -1,6 +1,7 @@
 package vista;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 
 import modelo.Usuario;
 import controlador.GestionUsuario;
@@ -86,7 +87,7 @@ public class BeanIndex implements Serializable{
 		this.textobotonregistrarusuario = textobotonregistrarusuario;
 	}
 	
-public String iniciarsesion(){
+	public String iniciarsesion(){
 		
 		//RequestContext context = RequestContext.getCurrentInstance();
 		//FacesMessage msg = null;
@@ -98,6 +99,7 @@ public String iniciarsesion(){
 			//bn.direccion
 			//bn.celular
 			//System.out.println(gestionarsolicitante.AutenticarSolicitante(login, password).getClass().getName());
+			//FacesContext facesContext = FacesContext.getCurrentInstance();			
 			return "menu.xhtml";
 		}
 		else{
@@ -117,9 +119,9 @@ public String iniciarsesion(){
 			}
 		}
 	}
+	
 	public Object cambio_registrarse(){
 		System.out.println("Esta entrando.");
-		return "registrarusuario.xhtml";
-		
+		return "registrarusuario.xhtml";		
 	}
 }

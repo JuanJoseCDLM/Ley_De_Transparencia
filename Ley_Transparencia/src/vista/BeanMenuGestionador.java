@@ -4,9 +4,12 @@ import java.io.Serializable;
 import java.util.List;
 
 
+
 //import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import modelo.Estado;
 
@@ -88,5 +91,34 @@ public class BeanMenuGestionador implements Serializable{
 		this.opcion5 = opcion5;
 	}
 	
+	public String cerrarsesion(){
+    	BeanMenu bm = new BeanMenu();
+		bm.email=null;
+		bm.direccion=null;
 
+		BeanRegistrarSolicitud bs = new BeanRegistrarSolicitud();
+		bs.direccion = null;
+		bs.email = null;
+		bs.nombre = null;
+		bs.apellido = null;
+		bs.cedula = 0;
+		
+		BeanConsultaCiudadana bcc= new BeanConsultaCiudadana();
+		bcc.cedula = 0;
+		bcc.email = null;
+		bcc.direccion = null;
+		
+		BeanRegistrarReposicion brr = new BeanRegistrarReposicion();
+		brr.cedula=0;
+		brr.email = null;
+		brr.direccion = null;
+		brr.celular = null;
+		
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+        if (session != null) {
+            session.invalidate(); //Cierre de sesion
+        }
+        return "index.xhtml";    	
+    }
 }

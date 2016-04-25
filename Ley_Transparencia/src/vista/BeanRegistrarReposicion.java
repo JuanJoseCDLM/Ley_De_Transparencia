@@ -14,12 +14,15 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import modelo.Peticion;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -411,14 +414,15 @@ public class BeanRegistrarReposicion implements Serializable{
 		}
 		System.out.println(fechafinal);
 		System.out.println(cedula);
-		gessolicitante.registrarpeticion(dato, observaciones,area,empresa,tipo,añoinfo, cedula);
+		gessolicitante.registrarreposicion(dato, observaciones,area,empresa,tipo,añoinfo, cedula);
+		saveMessage();
 		return null;
 	}
 	
 	public Object previsualizacion()throws FileNotFoundException{
 		StreamedContent file;
 		GestionUsuario gessolicitante = new GestionUsuario();
-		file=(StreamedContent) gessolicitante.previsual(dato, empresa, ciudad, observaciones, direccion, email, cedula, nombre, apellido);											
+		file=(StreamedContent) gessolicitante.previsual_reposicion(dato, empresa, ciudad, observaciones, direccion, email, cedula, nombre, apellido);											
 		if(file != null)
         	return file;
         return null;
@@ -444,9 +448,25 @@ public class BeanRegistrarReposicion implements Serializable{
 		BeanRegistrarReposicion brr = new BeanRegistrarReposicion();
 		brr.cedula=0;
 		brr.email = null;
-		brr.direccion = null;
+		brr.direccion = null;		
 		brr.celular = null;
-    	return "index.xhtml";
+		
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+        if (session != null) {
+            session.invalidate(); //Cierre de sesion
+        }
+        return "index.xhtml";    	
+    }
+	
+	public void saveMessage() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        System.out.println("No entra al mensaje");
+        context.addMessage(null, new FacesMessage("Successful",  "Solicitud enviada exitosamente.") );
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Excelente", "El derecho de reposición se realizo exitosamente.");
+        //FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Excelente", "La petición se realizo exitosamente.\n Feliz día.");
+        
+        RequestContext.getCurrentInstance().showMessageInDialog(message);
     }
 }
 

@@ -36,6 +36,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import javax.servlet.http.HttpSession;
 
 import vista.BeanConsultaCiudadana;
 import vista.BeanGestionarSoli;
@@ -118,6 +119,8 @@ public class GestionUsuario {
 			brr.email = usuario.getEmailUsuario();
 			brr.direccion = usuario.getDireccionUsuario();
 			brr.celular = usuario.getCelularUsuario();
+			brr.nombre = usuario.getNombreUsuario();
+			brr.apellido = usuario.getApellidoUsuario();
 			
 			entitymanager.getTransaction().begin();
 			entitymanager.persist(usuario);
@@ -131,12 +134,18 @@ public class GestionUsuario {
 		try{
 			Query consultausuario = entitymanager.createQuery("SELECT u FROM Usuario u WHERE u.cedulaUsuario ="+cedula+" and u.contrasenaUsuario ="+"\""+contrasena+"\"");
 			usuario =(Usuario) consultausuario.getSingleResult();
+			
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Usuario", usuario);
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+			session.setAttribute("usuarioic", usuario);
+			
 			BeanRegistrarSolicitud bs = new BeanRegistrarSolicitud();
 			
 			BeanMenu bm = new BeanMenu();
 			bm.email=usuario.getEmailUsuario();
 			bm.direccion=usuario.getDireccionUsuario();
 			bm.celular=usuario.getCelularUsuario();
+			//bm=(BeanMenu) session.getAttribute("usuarioic");
 
 			
 			bs.direccion = usuario.getDireccionUsuario();
@@ -145,6 +154,7 @@ public class GestionUsuario {
 			bs.nombre = usuario.getNombreUsuario();
 			bs.apellido = usuario.getApellidoUsuario();
 			bs.cedula = usuario.getCedulaUsuario();
+			//bs= (BeanRegistrarSolicitud) session.getAttribute(null);
 			
 			BeanConsultaCiudadana bcc= new BeanConsultaCiudadana();
 			bcc.cedula=usuario.getCedulaUsuario();
@@ -157,8 +167,10 @@ public class GestionUsuario {
 			brr.email = usuario.getEmailUsuario();
 			brr.direccion = usuario.getDireccionUsuario();
 			brr.celular = usuario.getCelularUsuario();
-	
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Has iniciado Sesión",""));
+			brr.nombre = usuario.getNombreUsuario();
+			brr.apellido = usuario.getApellidoUsuario();
+			
+			//.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Has iniciado Sesión",""));
 			return usuario;
 		}catch(NoResultException e){
 			try{
@@ -230,7 +242,7 @@ public class GestionUsuario {
 							peticion.setFechaPeticion(fecha);
 							peticion.setObservacionesPeticion(observaciones);
 							peticion.setEstadoPeticion(true);
-							peticion.setReposicion(true);
+							peticion.setReposicion(false);
 							peticion.setEstado(listaestados);
 							peticion.setEmpresa(listaempresa);
 							peticion.setUsuario(listausuario);
@@ -264,61 +276,61 @@ public class GestionUsuario {
 			Query consultapeticion = entitymanager.createQuery("SELECT p FROM Peticion p WHERE p.idPeticion ="+Integer.toString(idpeticion));
 			List<Peticion> listaconpe=consultapeticion.getResultList();
 			peticion=(Peticion) consultapeticion.getSingleResult();
-			System.out.println("Ya existe el id. /n Vuelva intentarlo.");
 		}catch(NoResultException e){
-			try{
-				Query consultaestado=entitymanager.createQuery("SELECT e FROM Estado e WHERE e.tipoEstado = :tipoEstado");
-				consultaestado.setParameter("tipoEstado", "Buscando informacion");
-				Estado listaestados=(Estado) consultaestado.getSingleResult();
-				System.out.println("Estado encontrado.");
+			//if (peticion.getReposicion()==false){
 				try{
-					Query consultausuario=entitymanager.createQuery("SELECT u FROM Usuario u WHERE u.cedulaUsuario = "+cedula);
-					System.out.println(cedula);
-					//consultausuario.setParameter("cedulaUsuario", cedula);
-					Usuario listausuario=(Usuario) consultausuario.getSingleResult();
-					System.out.println("Usuario encontrado.");
+					Query consultaestado=entitymanager.createQuery("SELECT e FROM Estado e WHERE e.tipoEstado = :tipoEstado");
+					consultaestado.setParameter("tipoEstado", "Derecho de reposicion");
+					Estado listaestados=(Estado) consultaestado.getSingleResult();
+					System.out.println("Estado encontrado.");
 					try{
-						Query consultatipo=entitymanager.createQuery("SELECT t FROM Tipoinformacion t WHERE t.nombreTipoInformacion = :nombreTipoInformacion");
-						consultatipo.setParameter("nombreTipoInformacion", tipoinfo);
-						Tipoinformacion listatipo=(Tipoinformacion) consultatipo.getSingleResult();
-						System.out.println("Tipo enconrado.");
-						
-						Query q=entitymanager.createQuery("SELECT t FROM Tipoinformacion t");
-						List<Tipoinformacion> resultados=q.getResultList();
-						tipoinformacion = new Tipoinformacion();
-						for(int i=0;i<resultados.size();i++){
-							tipoinformacion=resultados.get(i);
-				        	
-				        	String tipo=tipoinformacion.getNombreTipoInformacion();
-				        	if(tipo.equals(tipoinfo)){
-				        		idtipo=tipoinformacion.getIdTipoInformacion();				        		
-				        	}
-						}
-						
+						Query consultausuario=entitymanager.createQuery("SELECT u FROM Usuario u WHERE u.cedulaUsuario = "+cedula);
+						System.out.println(cedula);
+						//consultausuario.setParameter("cedulaUsuario", cedula);
+						Usuario listausuario=(Usuario) consultausuario.getSingleResult();
+						System.out.println("Usuario encontrado.");
 						try{
-							Query consultaempresa=entitymanager.createQuery("SELECT e FROM Empresa e WHERE e.nombreEmpresa = :nombreEmpresa");
-							consultaempresa.setParameter("nombreEmpresa", entidad);
-							Empresa listaempresa=(Empresa) consultaempresa.getSingleResult();
+							Query consultatipo=entitymanager.createQuery("SELECT t FROM Tipoinformacion t WHERE t.nombreTipoInformacion = :nombreTipoInformacion");
+							consultatipo.setParameter("nombreTipoInformacion", tipoinfo);
+							Tipoinformacion listatipo=(Tipoinformacion) consultatipo.getSingleResult();
+							System.out.println("Tipo enconrado.");
 							
-							System.out.println("Empresa enconrada.");							
-			        		idempresa=listaempresa.getIdEmpresa();
-			        		idempresaciudad=listaempresa.getCiudad_idCiudad();
-			        		idempresadepartamento=listaempresa.getCiudad_Departamento_idDepartamento();       
+							Query q=entitymanager.createQuery("SELECT t FROM Tipoinformacion t");
+							List<Tipoinformacion> resultados=q.getResultList();
+							tipoinformacion = new Tipoinformacion();
+							for(int i=0;i<resultados.size();i++){
+								tipoinformacion=resultados.get(i);
+				        	
+								String tipo=tipoinformacion.getNombreTipoInformacion();
+								if(tipo.equals(tipoinfo)){
+									idtipo=tipoinformacion.getIdTipoInformacion();				        		
+								}
+							}						
+							try{
+								Query consultaempresa=entitymanager.createQuery("SELECT e FROM Empresa e WHERE e.nombreEmpresa = :nombreEmpresa");
+								consultaempresa.setParameter("nombreEmpresa", entidad);
+								Empresa listaempresa=(Empresa) consultaempresa.getSingleResult();
+							
+								System.out.println("Empresa enconrada.");							
+								idempresa=listaempresa.getIdEmpresa();
+								idempresaciudad=listaempresa.getCiudad_idCiudad();
+								idempresadepartamento=listaempresa.getCiudad_Departamento_idDepartamento();       
 
-							peticion = new Peticion();
-							peticion.setIdPeticion(idpeticion);
-							peticion.setFechaPeticion(fecha);
-							peticion.setObservacionesPeticion(observaciones);
-							peticion.setEstadoPeticion(true);
-							peticion.setEstado(listaestados);
-							peticion.setEmpresa(listaempresa);
-							peticion.setUsuario(listausuario);
-							peticion.setTipoinformacion(listatipo);			
-							usuario.addPeticion(peticion);
-							entitymanager.getTransaction().begin();
-							entitymanager.persist(peticion);
-							entitymanager.getTransaction().commit();
-						}catch(NoResultException e4){
+								peticion = new Peticion();
+								peticion.setIdPeticion(idpeticion);
+								peticion.setFechaPeticion(fecha);
+								peticion.setObservacionesPeticion(observaciones);
+								peticion.setEstadoPeticion(true);
+								peticion.setReposicion(true);
+								peticion.setEstado(listaestados);
+								peticion.setEmpresa(listaempresa);
+								peticion.setUsuario(listausuario);
+								peticion.setTipoinformacion(listatipo);			
+								usuario.addPeticion(peticion);
+								entitymanager.getTransaction().begin();
+								entitymanager.persist(peticion);
+								entitymanager.getTransaction().commit();
+							}catch(NoResultException e4){
 							System.out.println("Empresa no enconrada.");
 						}
 					}catch(NoResultException e3){
@@ -327,14 +339,19 @@ public class GestionUsuario {
 				}catch(NoResultException e2){
 					System.out.println("Usuario no encontrado.");
 				}
-			}catch(NoResultException e1){
+				
+				}catch(NoResultException e1){
 				System.out.println("Ya estado no existe. /n Vuelva intentarlo.");
+			//}
 			}
 		}
 	}
 	
 	public Object previsual(Date fecha, String entidad, String ciudad, String observacion, String correo, String direccion, int cedula, String nombre, String apellido) throws FileNotFoundException{
 		Date date = new Date();
+		Query querypeticion=entitymanager.createQuery(buscarpeticion);
+		List<Peticion> listapeticiones = querypeticion.getResultList();
+		idpeticion=listapeticiones.size()+1;
 		DateFormat fechas = new SimpleDateFormat("yyyy-MM-dd");
 		String convertido = fechas.format(date);
 		String encabezado="Bogota D.C., "+convertido;
@@ -342,11 +359,11 @@ public class GestionUsuario {
 		String dirigido="Respetado señor/a:";
 		String parrafo1="En ejercicio del derecho fundamental de petición, consagrado en el artículo 23 de la Consitución Nacional, y del derecho de acceso a la infomación pública, consagrados en los artículos 20 y 74 de la misma, desarrollado por la ley 1712 de 2014; de manera respetuosa le solicito la siguiente información:";		
 		String parrafo2=observacion;		
-		String parrafo3="La respuesta a la presente solicitud la recibiré en la dirección fisica "+direccion+"o dirección de correo electronico "+correo+".";
+		String parrafo3="La respuesta a la presente solicitud la recibiré en la dirección de correo electronico "+direccion+" o dirección fisica "+correo+".";
 		String cordialmente="Cordialmente.";
 		String nombres=nombre+" "+apellido;
 		try{
-			FileOutputStream archivo = new FileOutputStream("C:/Users/JuanJose/Documents/Peticiones/"+cedula+".pdf");
+			FileOutputStream archivo = new FileOutputStream("C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_"+idpeticion+".pdf");
 			Document documento = new Document();
 		    PdfWriter.getInstance(documento, archivo);
 		    documento.open();
@@ -369,14 +386,89 @@ public class GestionUsuario {
 		    documento.add(new Paragraph(Integer.toString(cedula)));
 		    documento.close();
 		    
-		    File path = new File ("C:/Users/JuanJose/Documents/Peticiones/"+cedula+".pdf");
+		    File path = new File ("C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_"+idpeticion+".pdf");
 		    Desktop.getDesktop().open(path);
 		    
-		    Process p = Runtime.getRuntime().exec ("rundll32 SHELL32.DLL,ShellExec_RunDLL "+"C:/Users/JuanJose/Documents/Peticiones/"+cedula+".pdf");
+		    Process p = Runtime.getRuntime().exec ("rundll32 SHELL32.DLL,ShellExec_RunDLL "+"C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_"+idpeticion+".pdf");
 		    
-		    Runtime.getRuntime().exec("cmd /c start "+"C:/Users/JuanJose/Documents/Peticiones/"+cedula+".pdf");
+		    Runtime.getRuntime().exec("cmd /c start "+"C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_"+idpeticion+".pdf");
 		    
-		    InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("C:/Users/JuanJose/Documents/Peticiones/"+cedula+".pdf");
+		    InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_"+idpeticion+".pdf");
+	        file = new DefaultStreamedContent(stream, "image/pdf", "solicitud.pdf");
+		    
+		}
+		catch (Exception e){
+				e.printStackTrace();
+		}
+		return file;
+	}
+	
+	public Object previsual_reposicion(Date fecha, String entidad, String ciudad, String observacion, String correo, String direccion, int cedula, String nombre, String apellido) throws FileNotFoundException{
+		Date date = new Date();
+		Query querypeticion=entitymanager.createQuery(buscarpeticion);
+		List<Peticion> listapeticiones = querypeticion.getResultList();
+		idpeticion=listapeticiones.size()+1;
+		DateFormat fechas = new SimpleDateFormat("yyyy-MM-dd");
+		String convertido = fechas.format(date);
+		String encabezado="Bogota D.C., "+convertido;
+		String referencia="Referencia: Recurso de reposición";
+		String dirigido="Respetado señor/a:";
+		String parrafo1="En atención a su respuesta a la solicitud del, mediante el cual solicite me permito presentar recurso de reposición de acuerdo al artículo 27 de la ley 1712 de 2014.";
+		String parrafo2="La información solicitda es pública, ya que ";
+		String parrafo3="Por lo tanto y en el ejercicio del derecho fundamental de petición consagrado en el artículo 23 de la Constitución Nacional, consagrado en los artículos 20 y 74 de la misma, desarrollado por la ley 1712 de 2014:";
+		String parrafo4=observacion;
+		String parrafo5="En caso de que la entidad decida volver a negar la información, solicito  que se envie la información al Tribunal de lo Contencioso Administrativo o a los Juzgados Administrativos de acuerdo al citado artículo 27 de la ley 1712 de 2014:";
+		String parrafo6="'Negado este recurso corresponderá al Tribunal administrativo con jurisdicción en el lugar donde se encuentren los documentos, si se trata de autoridades nacionales, departamentales o del Distrito Capitak de Bogotá, o al juez administrativo si se trata de autoridades distritales y municipales, decidir en única instancia si se niega o se adopta, total o parcialmente, la petición formulada.";
+		String parrafo7="Para ello el funcionarios respectivo enviará la documentación correspondiente al tribunal o al juez administrativo en un plazo no superior a tres (3) días (...)'";
+		String parrafo8="Es importante recordar que el funcionario público debe, en virtud del cuplimiento de la ley, darle el trámite correspondiente al derecho de insistencia. De acuerdo con el artículo 79 de la ley 190 de 1995 'será causal de mala conducta el hecho de que un funcionario público obstaculice, retarde o niegue inmotivadamente el acceso de la ciudadania, en general, y de los medios de comunicación, en particular, a los documentos que reposen en la dependencia a su cargo y cuya solicitud se haya presentado con el cumplimiento de los requisitos exigidos por la ley'.";
+		String parrafo9="La respuesta al presente recurso de reposición la recibiré en la dirección de correo electronico "+direccion+" o dirección fisica "+correo+".";
+		String parrafo10="Agradezco de antemano su colaboración,";
+		String Atentamente="Atentamente.";
+		String firma=nombre+" "+apellido;
+		try{
+			FileOutputStream archivo = new FileOutputStream("C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_reposicion_"+idpeticion+".pdf");
+			Document documento = new Document();
+		    PdfWriter.getInstance(documento, archivo);
+		    documento.open();
+		    documento.add(new Paragraph(encabezado));
+		    documento.add(new Paragraph("\n\n\n\n"));
+		    documento.add(new Paragraph(referencia));
+		    documento.add(new Paragraph("\n\n\n\n"));
+		    documento.add(new Paragraph(dirigido));
+		    documento.add(new Paragraph("\n\n"));
+		    documento.add(new Paragraph(parrafo1));
+		    documento.add(new Paragraph("\n"));
+		    documento.add(new Paragraph(parrafo2));
+		    documento.add(new Paragraph("\n"));
+		    documento.add(new Paragraph(parrafo3));
+		    documento.add(new Paragraph("\n"));
+		    documento.add(new Paragraph(parrafo4));
+		    documento.add(new Paragraph("\n"));
+		    documento.add(new Paragraph(parrafo5));
+		    documento.add(new Paragraph("\n"));
+		    documento.add(new Paragraph(parrafo6));
+		    documento.add(new Paragraph("\n"));
+		    documento.add(new Paragraph(parrafo7));
+		    documento.add(new Paragraph("\n"));
+		    documento.add(new Paragraph(parrafo8));
+		    documento.add(new Paragraph("\n"));
+		    documento.add(new Paragraph(parrafo9));
+		    documento.add(new Paragraph("\n"));
+		    documento.add(new Paragraph(parrafo10));
+		    documento.add(new Paragraph(Atentamente));
+		    documento.add(new Paragraph("\n\n"));
+		    documento.add(new Paragraph(firma));
+		    documento.add(new Paragraph(Integer.toString(cedula)));
+		    documento.close();
+		    
+		    File path = new File ("C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_reposicion_"+idpeticion+".pdf");
+		    Desktop.getDesktop().open(path);
+		    
+		    Process p = Runtime.getRuntime().exec ("rundll32 SHELL32.DLL,ShellExec_RunDLL "+"C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_reposicion_"+idpeticion+".pdf");
+		    
+		    Runtime.getRuntime().exec("cmd /c start "+"C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_reposicion_"+idpeticion+".pdf");
+		    
+		    InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_reposicion_"+idpeticion+".pdf");
 	        file = new DefaultStreamedContent(stream, "image/pdf", "solicitud.pdf");
 		    
 		}

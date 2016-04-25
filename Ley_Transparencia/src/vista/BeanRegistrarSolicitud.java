@@ -2,6 +2,7 @@ package vista;
 
 import javax.faces.bean.ManagedBean;
 
+import org.primefaces.context.RequestContext;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +25,8 @@ import javax.faces.context.FacesContext;
 
 
 
+
+import javax.servlet.http.HttpSession;
 
 //import org.dom4j.DocumentException;
 import org.primefaces.model.DefaultStreamedContent;
@@ -416,6 +419,10 @@ public class BeanRegistrarSolicitud implements Serializable{
 		System.out.println(fechafinal);
 		System.out.println(cedula);
 		gessolicitante.registrarpeticion(dato, observaciones,area,empresa,tipo,añoinfo, cedula);
+		saveMessage();
+		//FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Petición realizada exitosamente."));
+		//FacesContext context = FacesContext.getCurrentInstance();         
+        //context.addMessage(null, new FacesMessage("Successful",  "Solicitud enviada exitosamente.") );
 		return null;
 	}
 	
@@ -458,6 +465,23 @@ public class BeanRegistrarSolicitud implements Serializable{
 		brr.email = null;
 		brr.direccion = null;
 		brr.celular = null;
-    	return "index.xhtml";
+		
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+        //if (session != null) 
+            session.invalidate(); //Cierre de sesion
+        
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return "cerrarsesion.xhtml?faces-rdirect=true";    	
+    }
+    
+    public void saveMessage() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        System.out.println("No entra al mensaje");
+        context.addMessage(null, new FacesMessage("Successful",  "Solicitud enviada exitosamente.") );
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Excelente", "La petición se realizo exitosamente.");
+        //FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Excelente", "La petición se realizo exitosamente.\n Feliz día.");
+        
+        RequestContext.getCurrentInstance().showMessageInDialog(message);
     }
 }

@@ -15,6 +15,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -189,6 +190,12 @@ public class BeanConsultaCiudadana implements Serializable{
 		brr.email = null;
 		brr.direccion = null;
 		brr.celular = null;
-    	return "index.xhtml";
+		
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+        if (session != null) {
+            session.invalidate(); //Cierre de sesion
+        }
+        return "index.xhtml";    	
     }
 }

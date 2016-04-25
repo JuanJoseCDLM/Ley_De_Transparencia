@@ -28,6 +28,7 @@ import org.primefaces.model.chart.PieChartModel;
 
 
 
+
 import javax.mail.*;
 import javax.mail.internet.*;
 
@@ -40,6 +41,7 @@ import modelo.Empresa;
 import modelo.Estado;
 import modelo.Gestionador;
 import modelo.Peticion;
+import modelo.Tipoinformacion;
 import modelo.Usuario;
 
 public class GestionAdministrador {
@@ -188,9 +190,12 @@ public class GestionAdministrador {
 		return peticion;
 		//aun no se
 	}
-	
-	
-	/////////////////
+	/////////////////	
+	private class autentificadorSMTP extends javax.mail.Authenticator {
+        public PasswordAuthentication getPasswordAuthentication() {
+            return new PasswordAuthentication(miCorreo, miContraseña);
+        }
+    }
 	
 	public Object crearmodelo(){
 		BeanEstadistica be = new BeanEstadistica();
@@ -212,15 +217,61 @@ public class GestionAdministrador {
             be.pieModel.set(empresa.getNombreEmpresa(), listapeticion.size());
         }       
         
-		be.pieModel.setTitle("Solicitudes por empresa");
+		be.pieModel.setTitle("Solicitudes por entidad");
 		be.pieModel.setLegendPosition("w");
 		be.pieModel.setShowDataLabels(true);
 		return be.pieModel;
 	}
 	
-	private class autentificadorSMTP extends javax.mail.Authenticator {
-        public PasswordAuthentication getPasswordAuthentication() {
-            return new PasswordAuthentication(miCorreo, miContraseña);
-        }
-    }
+	public Object crearmodelo2(){
+		BeanEstadistica be = new BeanEstadistica();
+		be.pieModel22 = new PieChartModel();
+		
+		Query buscarusuario = entitymanager.createQuery("SELECT u FROM Usuario u");
+        
+        List<Usuario> listausuario = buscarusuario.getResultList();
+        Peticion peticion = new Peticion();
+        Usuario usuario = new Usuario();
+        
+        int idusuario=0;
+        int c=0;
+        
+        for(int i=0;i<listausuario.size();i++){
+        	usuario=listausuario.get(i);
+        	idusuario=usuario.getCedulaUsuario();        	
+        	List<Peticion> listapeticion=usuario.getPeticions();
+            be.pieModel22.set(Integer.toString(usuario.getCedulaUsuario()), listapeticion.size());
+        }       
+        
+		be.pieModel22.setTitle("Solicitudes por usuario");
+		be.pieModel22.setLegendPosition("w");
+		be.pieModel22.setShowDataLabels(true);
+		return be.pieModel22;
+	}
+	
+	public Object crearmodelo3(){
+		BeanEstadistica be = new BeanEstadistica();
+		be.pieModel33 = new PieChartModel();
+		
+		Query buscarestado = entitymanager.createQuery("SELECT e FROM Estado e");
+        
+        List<Estado> listaestado = buscarestado.getResultList();
+        Peticion peticion = new Peticion();
+        Estado estado = new Estado();
+        
+        int idestado=0;
+        int c=0;
+        
+        for(int i=0;i<listaestado.size();i++){
+        	estado=listaestado.get(i);
+        	idestado=estado.getIdEstado();        	
+        	List<Peticion> listapeticion=estado.getPeticions();
+            be.pieModel33.set(estado.getTipoEstado(), listapeticion.size());
+        }       
+        
+		be.pieModel33.setTitle("Solicitudes por estado");
+		be.pieModel33.setLegendPosition("w");
+		be.pieModel33.setShowDataLabels(true);
+		return be.pieModel33;
+	}
 }

@@ -1,6 +1,8 @@
 package vista;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -114,6 +116,12 @@ public class BeanMenu implements Serializable{
 		brr.email = null;
 		brr.direccion = null;
 		brr.celular = null;
-    	return "index.xhtml";
+		
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+        if (session != null) {
+            session.invalidate(); //Cierre de sesion
+        }
+        return "index.xhtml";    	
     }
 }

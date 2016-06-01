@@ -3,6 +3,7 @@ package vista;
 import javax.faces.bean.ManagedBean;
 
 import org.primefaces.context.RequestContext;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +28,9 @@ import javax.faces.context.FacesContext;
 
 
 import javax.servlet.http.HttpSession;
+
+
+
 
 //import org.dom4j.DocumentException;
 import org.primefaces.model.DefaultStreamedContent;
@@ -54,9 +58,9 @@ public class BeanRegistrarSolicitud implements Serializable{
 	private String textlabelaño="Año de la informacion:";
 	private String textlabelobservaciones="Observaciones";
 	
-	private String checkboxcooreo="Comunicarse con usted a traves de correo.";
-	private String checkboxcelular="Comunicarse con usted a traves de celular.";
-	private String checkboxdireccionfisica="Comunicarse con usted a traves de dirección fisica.";
+	private String checkboxcooreo="Correo.";
+	private String checkboxcelular="Celular.";
+	private String checkboxdireccionfisica="Dirección fisica.";
 	
 	private String tectcajanombre="Nombre ...";
 	private String tectcajacargo="Cargo ...";
@@ -64,7 +68,9 @@ public class BeanRegistrarSolicitud implements Serializable{
 	private String textbotonenviar="Enviar";
 	private String textbotonprevisualizacion="Previsualización";
 
-	private String empresa;
+	private static String empresa;
+	private String bienvenida="Bienevenida";
+	private Map<String,Map<String,String>> data = new HashMap<String, Map<String,String>>();
 	private Map<String,String> empresas;
 	private String area;
 	private Map<String,String> areas;
@@ -77,7 +83,9 @@ public class BeanRegistrarSolicitud implements Serializable{
 	private String direccionsolicitante="";
 	private BigInteger celularsolicitante;
 	private String observaciones;
-	private String ventanaemergente; 
+	private String ventanaemergente;
+	private String nombresolicitante;
+	private String apellidosolicitante;
 
 	public static String email;
 	public static String direccion;
@@ -90,7 +98,46 @@ public class BeanRegistrarSolicitud implements Serializable{
 	String ciudad="Bogota";
 	public String observacion="";
 	private StreamedContent file;
+	public Map<String, Map<String, String>> getData() {
+		return data;
+	}
+
+	public void setData(Map<String, Map<String, String>> data) {
+		this.data = data;
+	}
+
+	public String getBienvenida() {
+		return bienvenida;
+	}
+
+	public void setBienvenida(String bienvenida) {
+		this.bienvenida = bienvenida;
+	}
+
+	public String getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(String empresa) {
+		BeanRegistrarSolicitud.empresa = empresa;
+	}
 	
+	public static String getNombre() {
+		return nombre;
+	}
+
+	public static void setNombre(String nombre) {
+		BeanRegistrarSolicitud.nombre = nombre;
+	}
+
+	public static String getApellido() {
+		return apellido;
+	}
+
+	public static void setApellido(String apellido) {
+		BeanRegistrarSolicitud.apellido = apellido;
+	}
+
 	public String getOpcion1() {
 		return opcion1;
 	}
@@ -176,6 +223,26 @@ public class BeanRegistrarSolicitud implements Serializable{
 	public void setDireccionsolicitante(String direccionsolicitante) {
 		this.direccionsolicitante = direccionsolicitante;
 		this.direccionsolicitante=direccion;
+	}	
+
+	public String getNombresolicitante() {
+		this.nombresolicitante=nombre;
+		return nombresolicitante;
+	}
+
+	public void setNombresolicitante(String nombresolicitante) {		
+		this.nombresolicitante = nombresolicitante;
+		this.nombresolicitante=nombre;
+	}
+
+	public String getApellidosolicitante() {
+		this.apellidosolicitante=apellido;
+		return apellidosolicitante;
+	}
+
+	public void setApellidosolicitante(String apellidosolicitante) {
+		this.apellidosolicitante = apellidosolicitante;
+		this.apellidosolicitante=apellido;
 	}
 
 	public BigInteger getCelularsolicitante() {
@@ -258,14 +325,6 @@ public class BeanRegistrarSolicitud implements Serializable{
 
 	public void setTextbotonenviar(String textbotonenviar) {
 		this.textbotonenviar = textbotonenviar;
-	}
-
-	public String getEmpresa() {
-		return empresa;
-	}
-
-	public void setEmpresa(String empresa) {
-		this.empresa = empresa;
 	}
 
 	public Map<String, String> getEmpresas() {
@@ -366,35 +425,13 @@ public class BeanRegistrarSolicitud implements Serializable{
 	
 	@PostConstruct
     public void init() {
-        empresas  = new HashMap<String, String>();
-        empresas.put("CODENSA", "CODENSA");
+		GestionUsuario gu = new GestionUsuario();
+		
+        empresas  = (Map<String, String>) gu.cargarempresa();        
         
-        areas  = new HashMap<String, String>();
-        areas.put("Sistemas", "Sistemas");
-        areas.put("Finanzas", "Finanzas");
-        areas.put("Recursos Humanos", "Recursos Humanos");
-        
-        tipos  = new HashMap<String, String>();
-        tipos.put("Balance financiero", "Balance financiero");
-        tipos.put("Contratos", "Contratos");
-        
-        años  = new HashMap<String, String>();
-        años.put("2000", "2000");
-        años.put("2001", "2001");
-        años.put("2002", "2002");
-        años.put("2003", "2003");
-        años.put("2004", "2004");
-        años.put("2005", "2005");
-        años.put("2006", "2006");
-        años.put("2007", "2007");
-        años.put("2008", "2008");
-        años.put("2009", "2009");
-        años.put("2010", "2010");
-        años.put("2011", "2011");
-        años.put("2012", "2012");
-        años.put("2013", "2013");
-        años.put("2014", "2014");
-        años.put("2015", "2015");
+        areas  = (Map<String, String>) gu.cargarareas(empresa);        
+                
+        tipos= (Map<String, String>) gu.cargartiposinformacion();        
     }
 	
 	public String registrar_peticion(){
@@ -418,8 +455,8 @@ public class BeanRegistrarSolicitud implements Serializable{
 		}
 		System.out.println(fechafinal);
 		System.out.println(cedula);
-		gessolicitante.registrarpeticion(dato, observaciones,area,empresa,tipo,añoinfo, cedula);
-		saveMessage();
+		System.out.println(tipo+"++++");
+		gessolicitante.registrarpeticion(dato, observaciones,area,empresa,tipo,añoinfo, cedula);		
 		//FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Petición realizada exitosamente."));
 		//FacesContext context = FacesContext.getCurrentInstance();         
         //context.addMessage(null, new FacesMessage("Successful",  "Solicitud enviada exitosamente.") );
@@ -434,14 +471,6 @@ public class BeanRegistrarSolicitud implements Serializable{
         	return file;
         return null;
 	}
-    
-    public StreamedContent FileDownloadView() {        
-        InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/resources/demo/images/optimus.jpg");
-        file = new DefaultStreamedContent(stream, "image/jpg", "downloaded_optimus.jpg");
-        if(file != null)
-        	return file;
-        return null;
-    }
     
     public String cerrarsesion(){
     	BeanMenu bm = new BeanMenu();
@@ -483,5 +512,14 @@ public class BeanRegistrarSolicitud implements Serializable{
         //FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Excelente", "La petición se realizo exitosamente.\n Feliz día.");
         
         RequestContext.getCurrentInstance().showMessageInDialog(message);
+    }
+    
+    public void onCountryChange() {
+        if(empresa !=null && !empresa.equals("")){
+        	GestionUsuario gu = new GestionUsuario();
+        	gu.cargarareas(empresa);
+            areas = data.get(empresa);System.out.println("Entrea para cambiar");}
+        else{
+           areas = new HashMap<String, String>();System.out.println("Entrea para cambiar");}
     }
 }

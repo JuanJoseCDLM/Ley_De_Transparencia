@@ -38,7 +38,7 @@ public class BeanRegistrarReposicion implements Serializable{
 	private String opcion3="Consulta ciudadana";
 	private String opcion4="Reposición";
 	private String opcion5="Cerrar Sesion";
-	private String textlabelentidad="Entidad:*";
+	private String textlabelentidad="Entidad:";
 	private String textlabelnombre="Nombre:";
 	private String textlabelcargo="Cargo:";
 	private String textlabelarea="Area a la que se solicita la info:*";
@@ -46,11 +46,11 @@ public class BeanRegistrarReposicion implements Serializable{
 	private String textlabelaño="Año de la informacion:";
 	private String textlabelobservaciones="Observaciones";
 	
-	private String checkboxcooreo="Comunicarse con usted a traves de correo.";
-	private String checkboxcelular="Comunicarse con usted a traves de celular.";
-	private String checkboxdireccionfisica="Comunicarse con usted a traves de dirección fisica.";
+	private String checkboxcooreo="Correo.";
+	private String checkboxcelular="Ccelular.";
+	private String checkboxdireccionfisica="Dirección fisica.";
 	
-	private String tectcajanombre="Nombre ...";
+	private String tectcajanombre="";
 	private String tectcajacargo="Cargo ...";
 	
 	private String textbotonenviar="Enviar";
@@ -86,6 +86,78 @@ public class BeanRegistrarReposicion implements Serializable{
 	private StreamedContent file;
 	private String peticion;
 	private List<String> peticiones;
+	
+	private String nombresolicitante;
+	private String apellidosolicitante;
+	private String bienvenida="Bienvenido";
+	
+	private String nombreentidad;
+	public static String entidad;
+	private String areaentidad;
+	public static String entidadarea;
+	private String tipoinformacion;
+	public static String tipoinfo;
+	
+	public String getNombreentidad() {
+		this.nombreentidad=entidad;
+		System.out.println(nombreentidad+"dsdss5");
+		return nombreentidad;
+	}
+
+	public void setNombreentidad(String nombreentidad) {
+		this.nombreentidad = nombreentidad;
+		this.nombreentidad=entidad;		
+	}
+
+	public String getAreaentidad() {
+		this.areaentidad=entidadarea;
+		System.out.println(areaentidad+"dsdss7");
+		return areaentidad;
+	}
+
+	public void setAreaentidad(String areaentidad) {
+		this.areaentidad = areaentidad;
+		this.areaentidad=entidadarea;
+	}
+
+	public String getTipoinformacion() {
+		this.tipoinformacion=tipoinfo;
+		System.out.println(tipoinformacion+"dsdss6");
+		return tipoinformacion;
+	}
+
+	public void setTipoinformacion(String tipoinformacion) {
+		this.tipoinformacion = tipoinformacion;
+		this.tipoinformacion=tipoinfo;
+	}
+
+	public String getNombresolicitante() {
+		this.nombresolicitante=nombre;
+		return nombresolicitante;
+	}
+
+	public void setNombresolicitante(String nombresolicitante) {		
+		this.nombresolicitante = nombresolicitante;
+		this.nombresolicitante=nombre;
+	}
+
+	public String getApellidosolicitante() {
+		this.apellidosolicitante=apellido;
+		return apellidosolicitante;
+	}
+
+	public void setApellidosolicitante(String apellidosolicitante) {
+		this.apellidosolicitante = apellidosolicitante;
+		this.apellidosolicitante=apellido;
+	}
+
+	public String getBienvenida() {
+		return bienvenida;
+	}
+
+	public void setBienvenida(String bienvenida) {
+		this.bienvenida = bienvenida;
+	}
 	
 	public String getPeticion() {
 		return peticion;
@@ -414,7 +486,7 @@ public class BeanRegistrarReposicion implements Serializable{
 		}
 		System.out.println(fechafinal);
 		System.out.println(cedula);
-		gessolicitante.registrarreposicion(dato, observaciones,area,empresa,tipo,añoinfo, cedula);
+		gessolicitante.registrarreposicion(dato, observaciones,areaentidad,nombreentidad,tipoinformacion,añoinfo, cedula);
 		saveMessage();
 		return null;
 	}
@@ -468,5 +540,11 @@ public class BeanRegistrarReposicion implements Serializable{
         
         RequestContext.getCurrentInstance().showMessageInDialog(message);
     }
+	
+	public String cargardatos(){
+		GestionUsuario gu = new GestionUsuario();
+		gu.cargar(peticion);
+		return null;
+	}
 }
 

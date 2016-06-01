@@ -579,5 +579,9 @@
         <extension>zip</extension>
         <mime-type>application/zip</mime-type>
     </mime-mapping>
-    
+    <listener>
+    <listener-class>
+            controlador.ListenerTaskExample
+        </listener-class>
+  </listener>
 </web-app>

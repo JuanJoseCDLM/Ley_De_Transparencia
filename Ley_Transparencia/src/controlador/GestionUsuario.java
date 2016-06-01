@@ -10,7 +10,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
  
@@ -24,6 +27,8 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.InputStream;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
@@ -42,9 +47,12 @@ import vista.BeanConsultaCiudadana;
 import vista.BeanGestionarSoli;
 import vista.BeanIndex;
 import vista.BeanMenu;
+import vista.BeanMenuGestionador;
+import vista.BeanOrganigrama;
 import vista.BeanRegistrarReposicion;
 import vista.BeanRegistrarSolicitud;
 import vista.BeanSolicitud;
+import modelo.Area;
 import modelo.Ciudad;
 import modelo.Departamento;
 import modelo.Empresa;
@@ -53,6 +61,11 @@ import modelo.Gestionador;
 import modelo.Peticion;
 import modelo.Tipoinformacion;
 import modelo.Usuario;
+
+import javax.mail.*;
+import javax.mail.Authenticator;
+import javax.mail.PasswordAuthentication;
+import javax.mail.internet.*;
 
 public class GestionUsuario {
 	private static final EntityManagerFactory entitymanagerfactory = Persistence.createEntityManagerFactory("LeyTransparencia");
@@ -72,6 +85,16 @@ public class GestionUsuario {
 	
 	BigInteger celularsolicitante=new BigInteger("3102132231", 10);
 	
+	final String miCorreo = "respuestadesolicitudes@gmail.com";
+    final String miContraseña = "respuestadesolicitudes&&";
+    final String servidorSMTP = "smtp.gmail.com";
+    final String puertoEnvio = "465";
+    private Map<String,Map<String,String>> data = new HashMap<String, Map<String,String>>();
+	
+	public Map<String, Map<String, String>> getData() {
+		return data;
+	}	
+
 	public Usuario RegistrarSolicitante (int cedula, String nombre, String apellido, BigInteger celular, String email, String direccion, String contrasena){
 		String cedulaso=Integer.toString(cedula);
 		usuario = new Usuario();
@@ -84,22 +107,22 @@ public class GestionUsuario {
 			usuario.setCedulaUsuario(cedula);
 			usuario.setNombreUsuario(nombre);
 			usuario.setApellidoUsuario(apellido);
-			usuario.setCelularUsuario(celular);
-			bs.celular=usuario.getCelularUsuario();
+			usuario.setCelularUsuario(celular);			
 			usuario.setEmailUsuario(email);			
-			bs.email =usuario.getEmailUsuario();
-			usuario.setDireccionUsuario(direccion);
-			bs.direccion=usuario.getDireccionUsuario();
+			usuario.setDireccionUsuario(direccion);			
 			usuario.setContrasenaUsuario(contrasena);
 			usuario.setEstadoUsuario(true);
+			
 			bs.nombre=usuario.getNombreUsuario();
 			bs.apellido=usuario.getApellidoUsuario();
 			
 			BeanMenu bm = new BeanMenu();
-			bm.email=usuario.getEmailUsuario();
-			bm.direccion=usuario.getDireccionUsuario();
-			bm.celular=usuario.getCelularUsuario();
-
+			bm.nombre=usuario.getNombreUsuario();
+			bm.apellido=usuario.getApellidoUsuario();
+			
+			BeanOrganigrama bo = new BeanOrganigrama();
+			bo.nombre=usuario.getNombreUsuario();
+			bo.apellido=usuario.getApellidoUsuario();
 			
 			bs.direccion = usuario.getDireccionUsuario();
 			bs.email = usuario.getEmailUsuario();
@@ -109,8 +132,8 @@ public class GestionUsuario {
 			bs.cedula = usuario.getCedulaUsuario();
 			
 			BeanConsultaCiudadana bcc= new BeanConsultaCiudadana();
-			bcc.cedula=usuario.getCedulaUsuario();
-			bcc.email = usuario.getEmailUsuario();
+			bcc.nombre=usuario.getNombreUsuario();
+			bcc.apellido = usuario.getApellidoUsuario();
 			bcc.direccion = usuario.getDireccionUsuario();
 			bcc.celular = usuario.getCelularUsuario();
 			
@@ -142,17 +165,18 @@ public class GestionUsuario {
 			BeanRegistrarSolicitud bs = new BeanRegistrarSolicitud();
 			
 			BeanMenu bm = new BeanMenu();
-			bm.email=usuario.getEmailUsuario();
-			bm.direccion=usuario.getDireccionUsuario();
-			bm.celular=usuario.getCelularUsuario();
+			bm.nombre=usuario.getNombreUsuario();
+			bm.apellido=usuario.getApellidoUsuario();
 			//bm=(BeanMenu) session.getAttribute("usuarioic");
-
+			BeanOrganigrama bo = new BeanOrganigrama();
+			bo.nombre=usuario.getNombreUsuario();
+			bo.apellido=usuario.getApellidoUsuario();
 			
 			bs.direccion = usuario.getDireccionUsuario();
 			bs.email = usuario.getEmailUsuario();
 			bs.celular = usuario.getCelularUsuario();
-			bs.nombre = usuario.getNombreUsuario();
-			bs.apellido = usuario.getApellidoUsuario();
+			bs.nombre=usuario.getNombreUsuario();
+			bs.apellido=usuario.getApellidoUsuario();
 			bs.cedula = usuario.getCedulaUsuario();
 			//bs= (BeanRegistrarSolicitud) session.getAttribute(null);
 			
@@ -161,14 +185,16 @@ public class GestionUsuario {
 			bcc.email = usuario.getEmailUsuario();
 			bcc.direccion = usuario.getDireccionUsuario();
 			bcc.celular = usuario.getCelularUsuario();
+			bcc.nombre=usuario.getNombreUsuario();
+			bcc.apellido=usuario.getApellidoUsuario();
 			
 			BeanRegistrarReposicion brr = new BeanRegistrarReposicion();
 			brr.cedula=usuario.getCedulaUsuario();
 			brr.email = usuario.getEmailUsuario();
 			brr.direccion = usuario.getDireccionUsuario();
 			brr.celular = usuario.getCelularUsuario();
-			brr.nombre = usuario.getNombreUsuario();
-			brr.apellido = usuario.getApellidoUsuario();
+			brr.nombre=usuario.getNombreUsuario();
+			brr.apellido=usuario.getApellidoUsuario();
 			
 			//.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Has iniciado Sesión",""));
 			return usuario;
@@ -176,6 +202,10 @@ public class GestionUsuario {
 			try{
 				Query consultaugestionador = entitymanager.createQuery("SELECT g FROM Gestionador g WHERE g.cedulaGestionador ="+cedula+" and g.contrasenaGestionador="+"\""+contrasena+"\"");
 				gestionador = (Gestionador) consultaugestionador.getSingleResult();
+				
+				/*BeanMenuGestionador bmg = new BeanMenuGestionador();
+				bmg.trabajo();*/
+				
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Has iniciado Sesión",""));
 				return gestionador; 
 			}catch(NoResultException ew){
@@ -186,7 +216,7 @@ public class GestionUsuario {
 	}
 	
 	
-	public void registrarpeticion(Date fecha, String observaciones, String area, String entidad, String tipoinfo, String año, int cedula){
+	public void registrarpeticion(Date fecha, String observaciones, String area, String entidad, String tipoinfo, String año, int cedula) {
 		Query querypeticion=entitymanager.createQuery(buscarpeticion);
 		List<Peticion> listapeticiones = querypeticion.getResultList();
 		idpeticion=listapeticiones.size()+1;
@@ -212,6 +242,7 @@ public class GestionUsuario {
 					try{
 						Query consultatipo=entitymanager.createQuery("SELECT t FROM Tipoinformacion t WHERE t.nombreTipoInformacion = :nombreTipoInformacion");
 						consultatipo.setParameter("nombreTipoInformacion", tipoinfo);
+						System.out.println(tipoinfo+"*************");
 						Tipoinformacion listatipo=(Tipoinformacion) consultatipo.getSingleResult();
 						System.out.println("Tipo enconrado.");
 						
@@ -251,8 +282,12 @@ public class GestionUsuario {
 							entitymanager.getTransaction().begin();
 							entitymanager.persist(peticion);
 							entitymanager.getTransaction().commit();
+							guardar_area(area,idpeticion);
 						}catch(NoResultException e4){
 							System.out.println("Empresa no enconrada.");
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
 						}
 					}catch(NoResultException e3){
 						System.out.println("No existe este tipo de informacion. /n Vuelva intentarlo.");
@@ -389,12 +424,13 @@ public class GestionUsuario {
 		    File path = new File ("C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_"+idpeticion+".pdf");
 		    Desktop.getDesktop().open(path);
 		    
-		    Process p = Runtime.getRuntime().exec ("rundll32 SHELL32.DLL,ShellExec_RunDLL "+"C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_"+idpeticion+".pdf");
+		    //Process p = Runtime.getRuntime().exec ("rundll32 SHELL32.DLL,ShellExec_RunDLL "+"C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_"+idpeticion+".pdf");
 		    
 		    Runtime.getRuntime().exec("cmd /c start "+"C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_"+idpeticion+".pdf");
+		    //Desktop.getDesktop().open(myFile);
 		    
-		    InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_"+idpeticion+".pdf");
-	        file = new DefaultStreamedContent(stream, "image/pdf", "solicitud.pdf");
+		    /*InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_"+idpeticion+".pdf");
+	        file = new DefaultStreamedContent(stream, "application/pdf", "solicitud.pdf");*/
 		    
 		}
 		catch (Exception e){
@@ -464,12 +500,12 @@ public class GestionUsuario {
 		    File path = new File ("C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_reposicion_"+idpeticion+".pdf");
 		    Desktop.getDesktop().open(path);
 		    
-		    Process p = Runtime.getRuntime().exec ("rundll32 SHELL32.DLL,ShellExec_RunDLL "+"C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_reposicion_"+idpeticion+".pdf");
+		    //Process p = Runtime.getRuntime().exec ("rundll32 SHELL32.DLL,ShellExec_RunDLL "+"C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_reposicion_"+idpeticion+".pdf");
 		    
 		    Runtime.getRuntime().exec("cmd /c start "+"C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_reposicion_"+idpeticion+".pdf");
 		    
-		    InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_reposicion_"+idpeticion+".pdf");
-	        file = new DefaultStreamedContent(stream, "image/pdf", "solicitud.pdf");
+		    /*InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("C:/Users/JuanJose/Documents/Peticiones/"+cedula+"_reposicion_"+idpeticion+".pdf");
+	        file = new DefaultStreamedContent(stream, "image/pdf", "solicitud.pdf");*/
 		    
 		}
 		catch (Exception e){
@@ -508,6 +544,209 @@ public class GestionUsuario {
         	//return peticioness;
         }
 		return peticioness;
+	}
+	
+	public void enviarconfirmacion(String mailReceptor, String contrasena, int cedula){
+	    String asunto = "Respuesta de solicitud";
+	    String cuerpo = "Usted se acaba de registrar en la pagina de solicitud de informacion pública."+
+	    "\n Su usuario es: "+cedula+"\n Su contraseña es: "+contrasena;
+	    
+	    Properties props = new Properties();
+        props.put("mail.smtp.mail.sender",miCorreo);
+	    props.put("mail.smtp.user", miCorreo);
+        props.put("mail.smtp.host", servidorSMTP);
+        props.put("mail.smtp.port", puertoEnvio);
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.socketFactory.port", puertoEnvio);
+        props.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.socketFactory.fallback", "false");
+        props.put("mail.smtp.starttls.enable","false" );
+        
+        SecurityManager security = System.getSecurityManager();
+        try {
+            Authenticator auth = new autentificadorSMTP();            
+            Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(miCorreo, miContraseña);
+                }
+            });
+            //session = Session.getDefaultInstance(props);
+            // session.setDebug(true);
+
+            MimeMessage msg = new MimeMessage(session);
+            msg.setText(cuerpo);
+            msg.setSubject(asunto);
+            msg.setFrom(new InternetAddress(((String)props.get("mail.smtp.mail.sender"))));            
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(mailReceptor));
+            Transport t = session.getTransport("smtp");
+            t.send(msg);
+        } catch (Exception mex) {
+            mex.printStackTrace();
+        }
+	}
+	
+	public class autentificadorSMTP extends javax.mail.Authenticator {
+        public PasswordAuthentication getPasswordAuthentication() {
+            return new PasswordAuthentication(miCorreo, miContraseña);
+        }
+    }
+	
+	public Object cargartiposinformacion(){
+		Map<String,String> tipos;
+		tipos  = new HashMap<String, String>();
+		
+		Query buscartipos = entitymanager.createQuery("SELECT t FROM Tipoinformacion t");
+        
+        List<Tipoinformacion> listatipos = buscartipos.getResultList();
+        Peticion peticion = new Peticion();
+        Estado estado = new Estado();
+        Tipoinformacion ti = new Tipoinformacion();
+        
+        int idtipo=0;
+        int c=0;
+        
+        for(int i=0;i<listatipos.size();i++){
+        	ti=listatipos.get(i);
+        	idtipo=ti.getIdTipoInformacion();        	
+        	tipos.put(ti.getNombreTipoInformacion(), ti.getNombreTipoInformacion());            
+        }
+		return tipos;
+	}
+	
+	public Object cargarempresa(){
+		Map<String,String> empresas;
+		empresas  = new HashMap<String, String>();
+		
+		Query buscarempresas = entitymanager.createQuery("SELECT e FROM Empresa e");
+        
+        List<Empresa> listaempresa = buscarempresas.getResultList();
+        Empresa em = new Empresa();
+        
+        int idempresa=0;
+        int c=0;
+        
+        for(int i=0;i<listaempresa.size();i++){
+        	em=listaempresa.get(i);
+        	idempresa=em.getIdEmpresa();
+        	empresas.put(em.getNombreEmpresa(), em.getNombreEmpresa());            
+        }
+        //cargarareas(empresas);
+		return empresas;
+	}
+	
+	public Object cargarareas(String empresa){
+		BeanRegistrarSolicitud br = new BeanRegistrarSolicitud();
+		System.out.println(empresa+" edffdgdgdgd 1");
+		empresa=br.getEmpresa();
+		Map<String,String> areas;
+		areas  = new HashMap<String, String>();
+		
+		try{
+			Query buscarareas = entitymanager.createQuery("SELECT a FROM Area a");
+			Query consultaempresa=entitymanager.createQuery("SELECT e FROM Empresa e WHERE e.nombreEmpresa = :nombreEmpresa");
+			System.out.println(empresa+" edffdgdgdgd 2");
+			consultaempresa.setParameter("nombreEmpresa", empresa);
+			Empresa listaempresa=(Empresa) consultaempresa.getSingleResult();
+			List<Area> listaarea = buscarareas.getResultList();
+	        Peticion peticion = new Peticion();
+	        Estado estado = new Estado();
+	        Area ar = new Area();
+	        
+	        int idarea=0;
+	        int c=0;
+	        
+	        for(int i=0;i<listaarea.size();i++){
+	        	ar=listaarea.get(i);
+        		idarea=ar.getEmpresa_idEmpresa();
+	        	if(listaempresa.getIdEmpresa()==ar.getEmpresa_idEmpresa()){
+	        		ar=listaarea.get(i);
+	        		idarea=ar.getIdtable();
+	        		areas.put(ar.getNombreArea(), ar.getNombreArea());
+	        		data.put("Germany", areas);
+	        	}
+	        }			
+		}catch(NoResultException e1){
+			
+		}
+		//"SELECT a FROM Area a WHERE a.empresa = :empresa"
+		/*Query buscarareas = entitymanager.createQuery("SELECT a FROM Area a WHERE a.empresa = :empresa");
+		consultaempresa.setParameter("empresa", "0");*/
+		return areas;
+	}
+	
+	public Object cargar(String idpeticion){
+		int idarea=0;
+		int identidad=0;
+		int idtipo=0;
+		int idreposicion=0;
+		
+		Query querypeticion=entitymanager.createQuery(buscarpeticion);
+		List<Peticion> listapeticiones = querypeticion.getResultList();
+		idreposicion=listapeticiones.size()+1;
+		
+		Peticion peticion = new Peticion();
+		Query consultapeticion = entitymanager.createQuery("SELECT p FROM Peticion p WHERE p.idPeticion ="+idpeticion);
+		List<Peticion> listaconpe=consultapeticion.getResultList();
+		
+		peticion=(Peticion) consultapeticion.getSingleResult();
+		
+		identidad=peticion.getEmpresa_idEmpresa();
+		idtipo=peticion.getTipoInformacion_idTipoInformacion();
+		//String tipo=
+		int idpeticion1=0;
+		idpeticion1=peticion.getIdPeticion();
+		
+		try{
+			Query consultatipo=entitymanager.createQuery("SELECT t FROM Tipoinformacion t WHERE t.idTipoInformacion = :idTipoInformacion");
+			consultatipo.setParameter("idTipoInformacion", idtipo);
+			Tipoinformacion listatipo=(Tipoinformacion) consultatipo.getSingleResult();
+			try{
+				Query consultaempresa=entitymanager.createQuery("SELECT e FROM Empresa e WHERE e.idEmpresa = :idEmpresa");
+				consultaempresa.setParameter("idEmpresa", identidad);
+				Empresa listaempresa=(Empresa) consultaempresa.getSingleResult();
+				try{
+					String ruta="C:/Users/JuanJose/Documents/Peticiones/"+idpeticion+".txt";
+					File fichero = new File(ruta);						
+					if(fichero.exists()){							
+						//File archivo = new File(ruta);
+						//BufferedWriter bw;
+						try {
+							FileReader lector = new FileReader("C:/Users/JuanJose/Documents/Peticiones/"+idpeticion+".txt");
+							BufferedReader contenido = new BufferedReader(lector);
+							String area=contenido.readLine();
+							BeanRegistrarReposicion brr = new BeanRegistrarReposicion();
+							brr.setNombreentidad(listaempresa.getNombreEmpresa());
+							brr.entidad=listaempresa.getNombreEmpresa();
+							brr.setTipoinformacion(listatipo.getNombreTipoInformacion());
+							brr.tipoinfo=listatipo.getNombreTipoInformacion();
+							brr.setAreaentidad(area);
+							brr.entidadarea=area; 
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}		
+				}catch(NoResultException e3){
+					
+				}
+				
+			}catch(NoResultException e2){
+				
+			}
+			
+		}catch(NoResultException e1){
+			
+		}		
+		return null;
+	}
+	
+	public void guardar_area(String nombrearea, int id) throws IOException{
+		String ruta="C:/Users/JuanJose/Documents/Peticiones/"+id+".txt";
+		File archivo = new File(ruta);
+		BufferedWriter bw;
+		bw = new BufferedWriter(new FileWriter(archivo));
+		bw.write(nombrearea);
+		bw.close();
 	}
 	
 }

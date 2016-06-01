@@ -11,7 +11,26 @@
 	<title>DerechoDePEticion</title>
 </h:head>
 <h:body>
-	<center><img src="logoucatolica.png"/></center>
+	<center>
+	<table>
+		<tr>
+			<td><img src="logoucatolica.png"/> </td>
+			<td>
+				<div class="centro">
+					<table>	
+						<tr>
+							<td><strong><p:outputLabel styleClass="datos3" value="#{beanRegistrarSolicitud.bienvenida}"> </p:outputLabel></strong></td>
+						</tr>		
+						<tr>
+							<td><strong><p:outputLabel styleClass="datos1" value="#{beanRegistrarSolicitud.nombresolicitante}"></p:outputLabel><p:outputLabel styleClass="datos2" value="#{beanRegistrarSolicitud.apellidosolicitante}"></p:outputLabel></strong></td>					
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>
+	</table>
+	</center>	
+			
 	
 	<h:form><center>
 		<div id="div">
@@ -22,6 +41,9 @@
     		<p:menuitem value="#{beanRegistrarSolicitud.opcion1}" url="menu.xhtml" >
         		<f:param name="i" value="0" />
     		</p:menuitem>
+    		<p:menuitem value="Estructura" url="organigrama.xhtml">
+       					<f:param name="i" value="6" />
+    				</p:menuitem>
     		<p:menuitem value="#{beanRegistrarSolicitud.opcion2}"  url="registrarsolicitud.xhtml">
         		<f:param name="i" value="1" />
     		</p:menuitem>
@@ -36,48 +58,37 @@
     		</p:menuitem>
 		</p:breadCrumb>
 		</div>
-		<h1 id="nota">Los datos que tengan * son de carácter obligatorio.</h1>
-		
-		
-		
-		<div class="centro">			
-			<table>			
-				<tr>
-					<td><strong><p:outputLabel styleClass="datos1" value="#{beanRegistrarSolicitud.emailsolicitante}"> | </p:outputLabel></strong></td>					
-					<td><strong><p:outputLabel styleClass="datos2" value="#{beanRegistrarSolicitud.direccionsolicitante}"> | </p:outputLabel></strong></td>					
-					<td><strong><p:outputLabel styleClass="datos3" value="#{beanRegistrarSolicitud.celularsolicitante}"></p:outputLabel></strong></td>
-				</tr>
-			</table>			
-		</div>
-		
-	
 		<br></br>
 		<br></br>
+		<h1 id="titulo">FORMULARIO DE SOLICITUD DE INFORMACIÓN</h1>
 		
+		
+		<h6 id="nota1">* Los datos que tengan * son de carácter obligatorio.</h6>			
 		<p:growl id="msgs" showDetail="true" />
-    		<h:panelGrid columns="2" cellpadding="5">
-    			<p:outputLabel styleClass="msj1"  value="#{beanRegistrarSolicitud.textlabelnombre}"></p:outputLabel><p:inputText placeholder="#{beanRegistrarSolicitud.tectcajanombre}"></p:inputText>
-				<p:outputLabel styleClass="msj2"  value="#{beanRegistrarSolicitud.textlabelcargo}"></p:outputLabel><p:inputText placeholder="#{beanRegistrarSolicitud.tectcajacargo}"></p:inputText>
+    		<h:panelGrid columns="2" cellpadding="5" >
+    			<!-- <p:outputLabel styleClass="msj1"  value="#{beanRegistrarSolicitud.textlabelnombre}"></p:outputLabel><p:inputText placeholder="#{beanRegistrarSolicitud.tectcajanombre}"></p:inputText>-->
+				<!-- <p:outputLabel styleClass="msj2"  value="#{beanRegistrarSolicitud.textlabelcargo}"></p:outputLabel><p:inputText placeholder="#{beanRegistrarSolicitud.tectcajacargo}"></p:inputText>-->
 				
 				<p:outputLabel styleClass="msj3"  value="#{beanRegistrarSolicitud.textlabelentidad}"></p:outputLabel>		
-					<p:selectOneMenu value="#{beanRegistrarSolicitud.empresa}" style="width:200px">
-        				<f:selectItem itemLabel="Seleccionar empresa" itemValue="" noSelectionOption="true" />
-        				<f:selectItems value="#{beanRegistrarSolicitud.empresas}" />
-        			</p:selectOneMenu>            		
+				<p:selectOneMenu value="#{beanRegistrarSolicitud.empresa}" style="width:200px">
+        			<f:selectItem itemLabel="Seleccionar empresa" itemValue="" noSelectionOption="true" />
+        			<f:selectItems value="#{beanRegistrarSolicitud.empresas}" />  
+        			<p:ajax listener="#{beanRegistrarSolicitud.init()}" update="area" />      			
+        			<!--<f:ajax listener="#{beanRegistrarSolicitud.areas}"></f:ajax>-->
+        		</p:selectOneMenu>
+        			
+        		<p:outputLabel styleClass="msj6" value="#{beanRegistrarSolicitud.textlabelarea}" for="area"></p:outputLabel>
+        		<p:selectOneMenu id="area" value="#{beanRegistrarSolicitud.area}" style="width:200px">
+			       	<f:selectItem itemLabel="Seleccionar area" itemValue="" noSelectionOption="true" />
+			       	<f:selectItems value="#{beanRegistrarSolicitud.areas}" />
+        		</p:selectOneMenu>            		
 				
 				<p:outputLabel styleClass="msj4" value="#{beanRegistrarSolicitud.textlabeltipo}"></p:outputLabel>
-        			<p:selectOneMenu value="#{beanRegistrarSolicitud.tipo}" style="width:200px">
-        				<f:selectItem itemLabel="Seleccionar tipo" itemValue="" noSelectionOption="true" />
-        				<f:selectItems value="#{beanRegistrarSolicitud.tipos}" />
-        			</p:selectOneMenu>
-				
-				
-        
-        		<p:outputLabel styleClass="msj6" value="#{beanRegistrarSolicitud.textlabelarea}"></p:outputLabel>
-        			<p:selectOneMenu value="#{beanRegistrarSolicitud.area}" style="width:200px">
-			        	<f:selectItem itemLabel="Seleccionar area" itemValue="" noSelectionOption="true" />
-			        	<f:selectItems value="#{beanRegistrarSolicitud.areas}" />
-        			</p:selectOneMenu>
+        		<p:selectOneMenu value="#{beanRegistrarSolicitud.tipo}" style="width:200px">
+        			<f:selectItem itemLabel="Seleccionar tipo" itemValue="" noSelectionOption="true" />
+        			<f:selectItems value="#{beanRegistrarSolicitud.tipos}" />
+        		</p:selectOneMenu> 
+        		
     	</h:panelGrid>        
     	
     	<table>
@@ -91,27 +102,31 @@
     			<td><h:outputText styleClass="display" /></td>
     		</tr>
     	</table>
-    	
+    	<h6 id="nota2">*Medio por el cual nos podemos comunicar en caso de alguna inquietud.</h6>
     	<table>
-    		<tr>
-    			<p:selectManyCheckbox>
-					<f:selectItem itemLabel="#{beanRegistrarSolicitud.checkboxcooreo}" itemValue="#{beanRegistrarSolicitud.checkboxcooreo}" />
-				</p:selectManyCheckbox>
+    		<tr >
+    			<td align="left">
+    				<p:selectManyCheckbox>
+						<f:selectItem itemLabel="#{beanRegistrarSolicitud.checkboxcooreo}" itemValue="#{beanRegistrarSolicitud.checkboxcooreo}" />
+					</p:selectManyCheckbox>
+				</td>
 			</tr>
 			<tr>
-				<p:selectManyCheckbox>
-					<f:selectItem itemLabel="#{beanRegistrarSolicitud.checkboxcelular}" itemValue="#{beanRegistrarSolicitud.checkboxcelular}" />
-				</p:selectManyCheckbox>
+				<td align="left">
+					<p:selectManyCheckbox>
+			    		<f:selectItem ALIGN="left" itemLabel="#{beanRegistrarSolicitud.checkboxcelular}" itemValue="#{beanRegistrarSolicitud.checkboxcelular}" />
+					</p:selectManyCheckbox>
+				</td>
 			</tr>
 			<tr>
-				<p:selectManyCheckbox>
-					<f:selectItem itemLabel="#{beanRegistrarSolicitud.checkboxdireccionfisica}" itemValue="#{beanRegistrarSolicitud.checkboxdireccionfisica}" />
-				</p:selectManyCheckbox>
+				<td align="left">
+					<p:selectManyCheckbox>
+						<f:selectItem ALIGN="left" itemLabel="#{beanRegistrarSolicitud.checkboxdireccionfisica}" itemValue="#{beanRegistrarSolicitud.checkboxdireccionfisica}" />
+					</p:selectManyCheckbox>
+				</td>
 			</tr>
 		</table>
-    	<br />
-		<br />
-		
+    	<br />		
 		<p:commandButton styleClass="previsualizacion" value="#{beanRegistrarSolicitud.textbotonprevisualizacion}" actionListener="#{beanRegistrarSolicitud.previsualizacion()}">
 			<p:fileDownload value="#{beanRegistrarSolicitud.file}" />
     	</p:commandButton>

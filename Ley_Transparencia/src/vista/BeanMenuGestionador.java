@@ -2,6 +2,7 @@ package vista;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Properties;
 
 
 
@@ -9,17 +10,23 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpSession;
 
+import controlador.GestionAdministrador;
+import controlador.Programacion;
 import modelo.Estado;
 
 @ManagedBean
 @ViewScoped
 public class BeanMenuGestionador implements Serializable{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private String opcion1="¿Quienes somos?";
@@ -34,6 +41,38 @@ public class BeanMenuGestionador implements Serializable{
 	private List<Estado> lista2;
 	private String cedula="";
 	
+	final String miCorreo = "respuestadesolicitudes@gmail.com";
+    final String miContraseña = "respuestadesolicitudes&&";
+    final String servidorSMTP = "smtp.gmail.com";
+    final String puertoEnvio = "465";
+    private String descripcion1="En este proyecto se desea desarrollar un sistema de información, en el cual está involucrada la facultad de ingeniería, el programa de sistemas y la facultad de derecho. Con el fin de tener control y llevar un seguimiento sobre la ley de transparencia y acceso a la información. Este software es para municipios de sexta categoría, principalmente para el municipio de San Francisco de Sales.\n";
+	private String descripcion2="Este proyecto lo están realizando los estudiantes Herman José García Pacheco y Juan Carlos Sánchez Fajardo como opción de grado, el director es el ingeniero John Velandia.";
+	private String descripcion3="Esta pagina tiene como fin facilitar a los usuario encontrar cualquier tipo de informacion que necesiten de una entidad, y de esta misma manera poder controlar la ley 1712 tambien conocida como ley de transparencia y acceso a la informacion, la cual consiste en permitir el acceso a cualquierto tipo de informacion siempre y cuando sea de caracter punlico. Para mas informacion de esta ley pueden visitar\n";
+	
+	public String getDescripcion1() {
+		return descripcion1;
+	}
+
+	public void setDescripcion1(String descripcion1) {
+		this.descripcion1 = descripcion1;
+	}
+
+	public String getDescripcion2() {
+		return descripcion2;
+	}
+
+	public void setDescripcion2(String descripcion2) {
+		this.descripcion2 = descripcion2;
+	}
+
+	public String getDescripcion3() {
+		return descripcion3;
+	}
+
+	public void setDescripcion3(String descripcion3) {
+		this.descripcion3 = descripcion3;
+	}
+
 	public int getI() {
 		return i;
 	}
@@ -121,4 +160,12 @@ public class BeanMenuGestionador implements Serializable{
         }
         return "index.xhtml";    	
     }
+	
+	public void trabajo(){
+		try {
+            new Programacion().iniciarTarea();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+	}
 }

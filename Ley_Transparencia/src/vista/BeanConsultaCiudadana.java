@@ -8,7 +8,11 @@ import java.io.Serializable;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.List;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -41,8 +45,51 @@ public class BeanConsultaCiudadana implements Serializable{
 	public static String email;
 	public static String direccion;
 	public static BigInteger celular;
+	public static String nombre;
+	public static String apellido;
 	public static int cedula;
 	String[] arrglos={"zip","rar","tgz","png","jpg","gif","xls","dot","pdf"};
+	
+	private String nombresolicitante;
+	private String apellidosolicitante;
+	private String bienvenida="Bienvenido";
+	private String condicion="Buscando informacion";
+	
+	public String getCondicion() {
+		return condicion;
+	}
+
+	public void setCondicion(String condicion) {
+		this.condicion = condicion;
+	}
+
+	public String getNombresolicitante() {
+		this.nombresolicitante=nombre;
+		return nombresolicitante;
+	}
+
+	public void setNombresolicitante(String nombresolicitante) {		
+		this.nombresolicitante = nombresolicitante;
+		this.nombresolicitante=nombre;
+	}
+
+	public String getApellidosolicitante() {
+		this.apellidosolicitante=apellido;
+		return apellidosolicitante;
+	}
+
+	public void setApellidosolicitante(String apellidosolicitante) {
+		this.apellidosolicitante = apellidosolicitante;
+		this.apellidosolicitante=apellido;
+	}
+
+	public String getBienvenida() {
+		return bienvenida;
+	}
+
+	public void setBienvenida(String bienvenida) {
+		this.bienvenida = bienvenida;
+	}
 	
 	
 	public String getOpcion5() {
@@ -126,9 +173,10 @@ public class BeanConsultaCiudadana implements Serializable{
 		lista=gu.Mostrar_las_peticiones_que_ha_realizado_un_solicitante(cedula);
 	}
 	
-	private StreamedContent file;
+	private StreamedContent file, file1;
+    private String contentType;
     
-    public Object FileDownloadView(String idformulario) throws IOException{        
+    public  StreamedContent FileDownloadView(String idformulario) throws IOException{        
         System.out.println(idformulario);
         InputStream stream1 = null;
     	// Aquí la carpeta donde queremos buscar    	
@@ -141,9 +189,11 @@ public class BeanConsultaCiudadana implements Serializable{
     		if (fichero.exists()){
     			System.out.println("El fichero " + Fichero + " existe");
     			try {
-    				stream1 = new FileInputStream(fichero);
-					file = new DefaultStreamedContent(stream1, "image/"+arrglos[i], nombre);
+    				stream1 = new FileInputStream(fichero);    				    				
+					String pathName="D:\\tmp\\"+nombre;
+					file = new DefaultStreamedContent(stream1, Files.probeContentType(Paths.get(pathName)), nombre);					
 					System.out.println("El fichero " + Fichero + " se descargo");
+					
 					//
 					return file;
     			} catch (FileNotFoundException e){
@@ -162,10 +212,6 @@ public class BeanConsultaCiudadana implements Serializable{
         }
     	//stream1.close();
     	return null;
-    }
- 
-    public StreamedContent getFile() {
-        return file;
     }
     
     public String cerrarsesion(){
@@ -197,5 +243,15 @@ public class BeanConsultaCiudadana implements Serializable{
             session.invalidate(); //Cierre de sesion
         }
         return "index.xhtml";    	
+    }
+    
+    public Object FileDownloadViewPrueba() {        
+        InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("C:/Users/JuanJose/Downloads/footer.png");        
+        file = new DefaultStreamedContent(stream, "image/png", "downloaded_optimus.png");
+        return file;
+    }
+ 
+    public StreamedContent getFile() {
+        return file;
     }
 }

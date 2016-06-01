@@ -333,10 +333,10 @@ public class BeanGestionarSoli implements Serializable{
 		bs.apellido = null;
 		bs.cedula = 0;
 		
-		BeanConsultaCiudadana bcc= new BeanConsultaCiudadana();
+		/*BeanConsultaCiudadana bcc= new BeanConsultaCiudadana();
 		bcc.cedula = 0;
 		bcc.email = null;
-		bcc.direccion = null;
+		bcc.direccion = null;*/
 		
 		BeanRegistrarReposicion brr = new BeanRegistrarReposicion();
 		brr.cedula=0;

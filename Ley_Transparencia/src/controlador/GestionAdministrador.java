@@ -23,20 +23,12 @@ import javax.persistence.Query;
 
 import org.primefaces.model.chart.PieChartModel;
 
-
-
-
-
-
-
 import javax.mail.*;
 import javax.mail.internet.*;
 
-import java.util.*;
 
 import vista.BeanEstadistica;
 import vista.BeanGestionarSoli;
-import vista.BeanRegistrarSolicitud;
 import modelo.Empresa;
 import modelo.Estado;
 import modelo.Gestionador;
@@ -44,7 +36,7 @@ import modelo.Peticion;
 import modelo.Tipoinformacion;
 import modelo.Usuario;
 
-public class GestionAdministrador {
+public class GestionAdministrador{
 	private static final EntityManagerFactory entitymanagerfactory = Persistence.createEntityManagerFactory("LeyTransparencia");
 	private static final EntityManager entitymanager = entitymanagerfactory.createEntityManager();
 	private static final String String = null;
@@ -129,7 +121,11 @@ public class GestionAdministrador {
 	        SecurityManager security = System.getSecurityManager();
 	        try {
 	            Authenticator auth = new autentificadorSMTP();
-	            Session session = Session.getInstance(props, auth);
+	            Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+	                protected PasswordAuthentication getPasswordAuthentication() {
+	                    return new PasswordAuthentication(miCorreo, miContraseña);
+	                }
+	            });
 	            // session.setDebug(true);
 				//Store store = session.getStore("smtp");
 				//store.connect(servidorSMTP, miCorreo, miContraseña);
@@ -273,5 +269,5 @@ public class GestionAdministrador {
 		be.pieModel33.setLegendPosition("w");
 		be.pieModel33.setShowDataLabels(true);
 		return be.pieModel33;
-	}
+	}	
 }

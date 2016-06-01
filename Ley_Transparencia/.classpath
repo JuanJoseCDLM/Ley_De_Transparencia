@@ -28,6 +28,13 @@
 	<classpathentry exported="true" kind="lib" path="WebContent/WEB-INF/lib/mysql-connector-java-5.1.24-bin.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/primefaces-5.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/iText-5.0.5.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/quartz-1.8.4.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/slf4j-api-1.6.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/slf4j-log4j12-1.6.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jta-1.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/log4j-1.2.14.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-pool-1.5.4.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-dbcp-1.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/EclipseLink 2.5.2">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
@@ -35,5 +42,12 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="C:/Users/JuanJose/Downloads/libquartz/lib/commons-dbcp-1.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JuanJose/Downloads/libquartz/lib/commons-pool-1.5.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JuanJose/Downloads/libquartz/lib/jta-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JuanJose/Downloads/libquartz/lib/log4j-1.2.14.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JuanJose/Downloads/libquartz/lib/quartz-1.8.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JuanJose/Downloads/libquartz/lib/slf4j-api-1.6.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JuanJose/Downloads/libquartz/lib/slf4j-log4j12-1.6.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

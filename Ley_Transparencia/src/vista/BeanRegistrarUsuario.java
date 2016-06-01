@@ -283,8 +283,10 @@ public class BeanRegistrarUsuario implements Serializable{
 		GestionUsuario gessolicitante = new GestionUsuario();
 		if(contrasena.equals(repetircontrasena)){
 			usuario=gessolicitante.RegistrarSolicitante(cedula, nombre, apellido, celular, email, direccion, contrasena);
-			if(usuario!=null)
-				return "menu.xhtml";			
+			if(usuario!=null){				
+				gessolicitante.enviarconfirmacion(email,contrasena,cedula);
+				return "menu.xhtml";	
+			}							
 		}		
 		return null;
 	}	

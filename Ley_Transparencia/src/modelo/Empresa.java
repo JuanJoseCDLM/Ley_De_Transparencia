@@ -13,6 +13,7 @@ import java.util.List;
 @NamedQuery(name="Empresa.findAll", query="SELECT e FROM Empresa e")
 @NamedQueries({
 @NamedQuery(name="Empresa.findAll", query="SELECT e FROM Empresa e"),
+@NamedQuery(name = "Empresa.findByCodigoEmpresa", query = "SELECT e FROM Empresa e WHERE e.idEmpresa = :idEmpresa"),
 @NamedQuery(name="Empresa.findByNombreEmpresa", query = "SELECT e FROM Empresa e WHERE e.nombreEmpresa = :nombreEmpresa")})
 public class Empresa implements Serializable {
 	private static final long serialVersionUID = 1L;

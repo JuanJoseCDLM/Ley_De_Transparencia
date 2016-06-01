@@ -1,14 +1,14 @@
 package vista;
 
+import java.io.Serializable;
+import java.math.BigInteger;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
-import java.io.Serializable;
-import java.math.BigInteger;
- 
 @ManagedBean
-public class BeanMenu implements Serializable{
+public class BeanOrganigrama implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	private String opcion1="¿Quienes somos?";
@@ -18,45 +18,17 @@ public class BeanMenu implements Serializable{
 	private String opcion5="Cerra Sesion";
 	private String emailsolicitante="";
 	private String direccionsolicitante="";
-	private BigInteger celularsolicitante;
-	
+	private BigInteger celularsolicitante;	
 	public static String email;
 	public static String direccion;
 	public static BigInteger celular;
 	public static String nombre;
 	public static String apellido;
+	
 	private String nombresolicitante;
 	private String apellidosolicitante;
 	private String bienvenida="Bienvenido";
 	
-	private String descripcion1="En este proyecto se desea desarrollar un sistema de información, en el cual está involucrada la facultad de ingeniería, el programa de sistemas y la facultad de derecho. Con el fin de tener control y llevar un seguimiento sobre la ley de transparencia y acceso a la información. Este software es para municipios de sexta categoría, principalmente para el municipio de San Francisco de Sales.\n";
-	private String descripcion2="Este proyecto lo están realizando los estudiantes Herman José García Pacheco y Juan Carlos Sánchez Fajardo como opción de grado, el director es el ingeniero John Velandia.";
-	private String descripcion3="Esta pagina tiene como fin facilitar a los usuario encontrar cualquier tipo de informacion que necesiten de una entidad, y de esta misma manera poder controlar la ley 1712 tambien conocida como ley de transparencia y acceso a la informacion, la cual consiste en permitir el acceso a cualquierto tipo de informacion siempre y cuando sea de caracter punlico. Para mas informacion de esta ley pueden visitar\n";
-	
-	public String getDescripcion3() {
-		return descripcion3;
-	}
-
-	public void setDescripcion3(String descripcion3) {
-		this.descripcion3 = descripcion3;
-	}
-
-	public String getDescripcion1() {
-		return descripcion1;
-	}
-
-	public void setDescripcion1(String descripcion1) {
-		this.descripcion1 = descripcion1;
-	}
-
-	public String getDescripcion2() {
-		return descripcion2;
-	}
-
-	public void setDescripcion2(String descripcion2) {
-		this.descripcion2 = descripcion2;
-	}
-
 	public String getNombresolicitante() {
 		this.nombresolicitante=nombre;
 		return nombresolicitante;
@@ -84,23 +56,23 @@ public class BeanMenu implements Serializable{
 	public void setBienvenida(String bienvenida) {
 		this.bienvenida = bienvenida;
 	}
-
+	
 	public static String getNombre() {
 		return nombre;
 	}
 
 	public static void setNombre(String nombre) {
-		BeanMenu.nombre = nombre;
+		BeanOrganigrama.nombre = nombre;
 	}
 
 	public static String getApellido() {
 		return apellido;
 	}
-
+	
 	public static void setApellido(String apellido) {
-		BeanMenu.apellido = apellido;
+		BeanOrganigrama.apellido = apellido;
 	}
-
+	
 	public String getEmailsolicitante() {
 		this.emailsolicitante=email;
 		return emailsolicitante;
@@ -172,7 +144,7 @@ public class BeanMenu implements Serializable{
 	}
 	
 	public String cerrarsesion(){
-    	BeanMenu bm = new BeanMenu();
+    	BeanOrganigrama bm = new BeanOrganigrama();
 		bm.email=null;
 		bm.direccion=null;
 

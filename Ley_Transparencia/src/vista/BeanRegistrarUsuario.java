@@ -134,12 +134,10 @@ public class BeanRegistrarUsuario implements Serializable{
 	}
 
 	public String getTextcajalicencia() {
-		System.out.println(textcajalicencia);
 		return textcajalicencia;
 	}
 
 	public void setTextcajalicencia(String textcajalicencia) {
-		System.out.println(textcajalicencia);
 		this.textcajalicencia = textcajalicencia;
 	}
 

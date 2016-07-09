@@ -165,7 +165,6 @@ public class BeanMenuGestionador implements Serializable{
 		try {
             new Programacion().iniciarTarea();
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
         }
 	}
 }

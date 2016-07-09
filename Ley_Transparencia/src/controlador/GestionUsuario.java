@@ -101,7 +101,6 @@ public class GestionUsuario {
 		try{	
 			Query consulta =entitymanager.createQuery("Select u From Usuario u Where u.cedulaUsuario="+cedula);
 			usuario = (Usuario) consulta.getSingleResult();
-			System.out.println(consulta);
 		}catch(NoResultException e){			
 			BeanRegistrarSolicitud bs = new BeanRegistrarSolicitud();			
 			usuario.setCedulaUsuario(cedula);
@@ -220,31 +219,22 @@ public class GestionUsuario {
 		Query querypeticion=entitymanager.createQuery(buscarpeticion);
 		List<Peticion> listapeticiones = querypeticion.getResultList();
 		idpeticion=listapeticiones.size()+1;
-		System.out.println(listapeticiones.size());
-		System.out.println(idpeticion);
 		try{
 			Query consultapeticion = entitymanager.createQuery("SELECT p FROM Peticion p WHERE p.idPeticion ="+Integer.toString(idpeticion));
 			List<Peticion> listaconpe=consultapeticion.getResultList();
 			peticion=(Peticion) consultapeticion.getSingleResult();
-			System.out.println("Ya existe el id. /n Vuelva intentarlo.");
 		}catch(NoResultException e){
 			try{
 				Query consultaestado=entitymanager.createQuery("SELECT e FROM Estado e WHERE e.tipoEstado = :tipoEstado");
 				consultaestado.setParameter("tipoEstado", "Buscando informacion");
 				Estado listaestados=(Estado) consultaestado.getSingleResult();
-				System.out.println("Estado encontrado.");
 				try{
 					Query consultausuario=entitymanager.createQuery("SELECT u FROM Usuario u WHERE u.cedulaUsuario = "+cedula);
-					System.out.println(cedula);
-					//consultausuario.setParameter("cedulaUsuario", cedula);
 					Usuario listausuario=(Usuario) consultausuario.getSingleResult();
-					System.out.println("Usuario encontrado.");
 					try{
 						Query consultatipo=entitymanager.createQuery("SELECT t FROM Tipoinformacion t WHERE t.nombreTipoInformacion = :nombreTipoInformacion");
 						consultatipo.setParameter("nombreTipoInformacion", tipoinfo);
-						System.out.println(tipoinfo+"*************");
 						Tipoinformacion listatipo=(Tipoinformacion) consultatipo.getSingleResult();
-						System.out.println("Tipo enconrado.");
 						
 						Query q=entitymanager.createQuery("SELECT t FROM Tipoinformacion t");
 						List<Tipoinformacion> resultados=q.getResultList();
@@ -263,7 +253,6 @@ public class GestionUsuario {
 							consultaempresa.setParameter("nombreEmpresa", entidad);
 							Empresa listaempresa=(Empresa) consultaempresa.getSingleResult();
 							
-							System.out.println("Empresa enconrada.");							
 			        		idempresa=listaempresa.getIdEmpresa();
 			        		idempresaciudad=listaempresa.getCiudad_idCiudad();
 			        		idempresadepartamento=listaempresa.getCiudad_Departamento_idDepartamento();       
@@ -305,8 +294,6 @@ public class GestionUsuario {
 		Query querypeticion=entitymanager.createQuery(buscarpeticion);
 		List<Peticion> listapeticiones = querypeticion.getResultList();
 		idpeticion=listapeticiones.size()+1;
-		System.out.println(listapeticiones.size());
-		System.out.println(idpeticion);
 		try{
 			Query consultapeticion = entitymanager.createQuery("SELECT p FROM Peticion p WHERE p.idPeticion ="+Integer.toString(idpeticion));
 			List<Peticion> listaconpe=consultapeticion.getResultList();
@@ -317,18 +304,14 @@ public class GestionUsuario {
 					Query consultaestado=entitymanager.createQuery("SELECT e FROM Estado e WHERE e.tipoEstado = :tipoEstado");
 					consultaestado.setParameter("tipoEstado", "Derecho de reposicion");
 					Estado listaestados=(Estado) consultaestado.getSingleResult();
-					System.out.println("Estado encontrado.");
 					try{
 						Query consultausuario=entitymanager.createQuery("SELECT u FROM Usuario u WHERE u.cedulaUsuario = "+cedula);
-						System.out.println(cedula);
 						//consultausuario.setParameter("cedulaUsuario", cedula);
 						Usuario listausuario=(Usuario) consultausuario.getSingleResult();
-						System.out.println("Usuario encontrado.");
 						try{
 							Query consultatipo=entitymanager.createQuery("SELECT t FROM Tipoinformacion t WHERE t.nombreTipoInformacion = :nombreTipoInformacion");
 							consultatipo.setParameter("nombreTipoInformacion", tipoinfo);
 							Tipoinformacion listatipo=(Tipoinformacion) consultatipo.getSingleResult();
-							System.out.println("Tipo enconrado.");
 							
 							Query q=entitymanager.createQuery("SELECT t FROM Tipoinformacion t");
 							List<Tipoinformacion> resultados=q.getResultList();
@@ -346,7 +329,6 @@ public class GestionUsuario {
 								consultaempresa.setParameter("nombreEmpresa", entidad);
 								Empresa listaempresa=(Empresa) consultaempresa.getSingleResult();
 							
-								System.out.println("Empresa enconrada.");							
 								idempresa=listaempresa.getIdEmpresa();
 								idempresaciudad=listaempresa.getCiudad_idCiudad();
 								idempresadepartamento=listaempresa.getCiudad_Departamento_idDepartamento();       
@@ -519,7 +501,6 @@ public class GestionUsuario {
 		Usuario usuario=(Usuario) consultausuariopeticion.getSingleResult();
 
 		List<Peticion> listausuariopeticion=usuario.getPeticions();
-		System.out.println("el usuario existe");
 		return listausuariopeticion;
 	}
 
@@ -528,20 +509,15 @@ public class GestionUsuario {
 		peticiones=new ArrayList();
 		List<String> peticioness;
 		Query consultausuario=entitymanager.createQuery("SELECT u FROM Usuario u WHERE u.cedulaUsuario = "+cedula);
-		System.out.println(cedula);
 		//consultausuario.setParameter("cedulaUsuario", cedula);
 		Usuario listausuario=(Usuario) consultausuario.getSingleResult();
-		System.out.println("Usuario encontrado.");	
 		
 		List<Peticion>listaPeticion=listausuario.getPeticions();
         
         peticioness=new ArrayList();
         
         for(int i=0;i<listaPeticion.size();i++){
-        	//System.out.println("i"+i);
-        	peticioness.add(Integer.toString(listaPeticion.get(i).getIdPeticion()));
-        	
-        	//return peticioness;
+        	peticioness.add(Integer.toString(listaPeticion.get(i).getIdPeticion()));        	
         }
 		return peticioness;
 	}
@@ -637,7 +613,6 @@ public class GestionUsuario {
 	
 	public Object cargarareas(String empresa){
 		BeanRegistrarSolicitud br = new BeanRegistrarSolicitud();
-		System.out.println(empresa+" edffdgdgdgd 1");
 		empresa=br.getEmpresa();
 		Map<String,String> areas;
 		areas  = new HashMap<String, String>();
@@ -645,7 +620,6 @@ public class GestionUsuario {
 		try{
 			Query buscarareas = entitymanager.createQuery("SELECT a FROM Area a");
 			Query consultaempresa=entitymanager.createQuery("SELECT e FROM Empresa e WHERE e.nombreEmpresa = :nombreEmpresa");
-			System.out.println(empresa+" edffdgdgdgd 2");
 			consultaempresa.setParameter("nombreEmpresa", empresa);
 			Empresa listaempresa=(Empresa) consultaempresa.getSingleResult();
 			List<Area> listaarea = buscarareas.getResultList();

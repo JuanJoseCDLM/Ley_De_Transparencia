@@ -134,7 +134,6 @@ public class GestionAdministrador{
 	            BodyPart adjunto = new MimeBodyPart();
 	            
 	            adjunto.setDataHandler(new DataHandler(new FileDataSource("D:\\tmp\\"+nombre)));
-	            System.out.println(nombre);
 	            adjunto.setFileName(nombre);
 	            
 	            msg.setSubject(asunto);
@@ -182,7 +181,6 @@ public class GestionAdministrador{
 		//paso4: Obtener por peticion la id, fecha y el estado
 		List<Peticion> peticion=gestionador.getEmpresa().getPeticions();
 		//paso5: Mostrar un listado de peticiones observando el id, la fecha de realizacion de la peticion, hora de realizacion de la peticion, y el estado actual de la peticion
-		System.out.println("el usuario existe");
 		return peticion;
 		//aun no se
 	}

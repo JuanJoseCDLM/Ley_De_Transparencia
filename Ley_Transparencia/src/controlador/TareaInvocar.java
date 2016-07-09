@@ -74,10 +74,8 @@ public class TareaInvocar implements Job {
 		List<Peticion> listaconpe=consultapeticion.getResultList();
 		Usuario usuario;
 		Peticion peticion;// = (Peticion) consultapeticion.getSingleResult();
-		System.out.println(listaconpe.size()+"cantidad");
 		for(int i=0;i<listaconpe.size();i++){			
 			peticion=listaconpe.get(i);
-			System.out.println(peticion.getEstado_idEstado()+"Que imprime");
 			if(peticion.getEstado_idEstado() ==4){				
 				try{
 					String asunto = "Advertencia";
@@ -122,6 +120,5 @@ public class TareaInvocar implements Job {
 			}
 		}
 	    SimpleDateFormat formato = new SimpleDateFormat("hh:mm:ss");
-	    System.out.println( "Tarea invocada a la hora: " + formato.format(new Date()));	
 	}
 }

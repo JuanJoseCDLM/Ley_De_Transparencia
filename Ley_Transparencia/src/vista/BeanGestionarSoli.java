@@ -229,7 +229,6 @@ public class BeanGestionarSoli implements Serializable{
         peticioness=new ArrayList();
         
         for(int i=0;i<listaPeticion.size();i++){
-        	//System.out.println("i"+i);
         	int j=0;
         	while(listaPeticion_buscarinformacion.size()>j){
         		if(listaPeticion.get(i).equals(listaPeticion_buscarinformacion.get(j))){
@@ -245,7 +244,6 @@ public class BeanGestionarSoli implements Serializable{
 		int tamano=file.getFileName().length();
 		nombrearchivo = peticion+"peticion"+file.getFileName().subSequence(tamano-4, tamano);
 		File resultado = new File("D:\\tmp\\"+peticion+"peticion"+file.getFileName().subSequence(tamano-4, tamano));
-		//System.out.println(resultado);
 		GestionAdministrador ga = new GestionAdministrador();
 		ga.ruta2 = peticion+"peticion"+file.getFileName().subSequence(tamano-4, tamano);
 		try {
@@ -264,7 +262,6 @@ public class BeanGestionarSoli implements Serializable{
 
 			fileOutputStream.close();
 			inputStream.close();			
-			//System.out.println(file.getSize()+" tamaño"+file.getContentType()+"tipo");
 			FacesMessage msg =new FacesMessage("Descripcion del archivo", "Nombre del archivo: " +
 			file.getFileName() +"\n Tamaño del archivo: " +
 			file.getSize() / 1024 +"\n Tipo: " + file.getContentType() +
@@ -290,12 +287,8 @@ public class BeanGestionarSoli implements Serializable{
 		if(estado.equals("Información Encontrada")&& file!=null){
 			if(controladorArchivos.tamanoArchivo(file) && controladorArchivos.Reconocer_formato(file)){
 				manejararchivos(peticion);
-				System.out.println(peticion);
 				gestionAdministrador.Cambiar_estado_de_la_petición_en_caso_de_recibir_documento(peticion, nombrearchivo);			
-				//peticioness.remove(peticion);
-				
 				saveMessage();
-			
 				return "solicitudes.xhtml";
 			}
 			else{
@@ -307,9 +300,7 @@ public class BeanGestionarSoli implements Serializable{
 			{
 				if(controladorArchivos.tamanoArchivo(file) && controladorArchivos.Reconocer_formato(file)){
 					manejararchivos(peticion);
-					System.out.println(peticion);
 					gestionAdministrador.Cambiar_estado_de_la_petición_en_caso_de_rechazo(peticion);
-					//peticioness.remove(peticion);
 					return "solicitudes.xhtml";
 				}
 				else{

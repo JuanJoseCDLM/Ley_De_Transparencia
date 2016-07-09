@@ -178,7 +178,6 @@ public class BeanConsultaCiudadana implements Serializable{
     
     public  void FileDownloadView(String idformulario) {        
         int a=0;
-    	System.out.println(idformulario);
         InputStream stream1 = null;
     	// Aquí la carpeta donde queremos buscar    	
     	String nombre;
@@ -186,41 +185,26 @@ public class BeanConsultaCiudadana implements Serializable{
 			nombre=idformulario+"peticion."+arrglos[i];
 			String Fichero = "D:\\tmp\\"+nombre;
 	    	File fichero = new File(Fichero);
-	    	//stream1 = new FileInputStream(fichero);
     		if (fichero.exists()){
-    			System.out.println("El fichero " + Fichero + " existe");
     			try {
     				stream1 = new FileInputStream(fichero);    				    				
 					String pathName="D:\\tmp\\"+nombre;
-					//InputStream inputstream = new FileInputStream("C:\\Users\\JuanJose\\Downloads\\wallpaper.jpg");
 		        	content = new DefaultStreamedContent(stream1,"application/jpg","descarga.jpg");
 					try {
 						file = new DefaultStreamedContent(stream1, Files.probeContentType(Paths.get(pathName)), nombre);
 					} catch (IOException e) {
-
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}					
-					System.out.println("El fichero " + Fichero + " se descargo");					
 					a=1;
 					break;
-					//
-					//return file;
     			} catch (FileNotFoundException e){
-    				System.out.println("Frfregtrgtrt");
-    				// TODO Auto-generated catch block
     				e.printStackTrace();    				
     				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error","El archivo no se encuentra."));
-    				//return null;
     			}    	        	
     		}
     		else{
-    			//stream1.close();
-    			System.out.println("El fichero " + Fichero + " no existe");
     		}
         }
-    	//stream1.close();
-    	//return null;
     }
     
     public String cerrarsesion(){

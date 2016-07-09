@@ -102,7 +102,6 @@ public class BeanSolicitud implements Serializable{
 	}
 	@PostConstruct
 	public void init() {
-		System.out.println(cedulagestionador);
 		if(cedulagestionador>0){
 			GestionAdministrador usuario_Administrador=new GestionAdministrador ();		
 			lista=usuario_Administrador.Mostrar_las_peticiones_que_han_llegado_al_Usuario_Administrador(cedulagestionador);

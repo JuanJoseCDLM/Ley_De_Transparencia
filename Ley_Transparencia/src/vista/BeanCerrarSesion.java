@@ -136,12 +136,6 @@ public class BeanCerrarSesion implements Serializable{
 		GestionUsuario gestionarsolicitante = new GestionUsuario();
 		//aqui busca si existe un usuario 
 		if(gestionarsolicitante.AutenticarSolicitante(textocajausuario, textocajacontrasena).getClass().getName().equals("modelo.Usuario")){
-			BeanMenu bn = new BeanMenu();
-			//bn.email = gestionarsolicitante.getClass().getName(
-			//bn.direccion
-			//bn.celular
-			//System.out.println(gestionarsolicitante.AutenticarSolicitante(login, password).getClass().getName());
-			//FacesContext facesContext = FacesContext.getCurrentInstance();			
 			return "menu.xhtml";
 		}
 		else{
@@ -153,7 +147,6 @@ public class BeanCerrarSesion implements Serializable{
 				bs.cedulagestionador=Integer.parseInt(textocajausuario);
 				BeanGestionarSoli bgs=new BeanGestionarSoli();
 				bgs.login=textocajausuario;
-				//System.out.println(gestionarsolicitante.AutenticarSolicitante(login, password).getClass().getName());
 				return "menugestionador.xhtml";
 			}
 			else{
@@ -164,7 +157,6 @@ public class BeanCerrarSesion implements Serializable{
 	
 
 	public Object cambio_registrarse(){
-		System.out.println("Esta entrando.");
 		return "registrarusuario.xhtml";		
 	}
 	

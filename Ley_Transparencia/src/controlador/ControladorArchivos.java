@@ -20,7 +20,6 @@ import org.primefaces.model.UploadedFile;
 public class ControladorArchivos{
 	public boolean tamanoArchivo(UploadedFile file){
 		long tamano=file.getSize();
-		//System.out.println(tamano);
 		//10 megabyte
 		if(tamano<=10485760){
 			return true;
@@ -33,7 +32,6 @@ public class ControladorArchivos{
 		String nombre_del_archivo=file.getFileName();
 		int largo_del_nombre_del_archivo=nombre_del_archivo.length();
 		String analizar= (String) nombre_del_archivo.subSequence(largo_del_nombre_del_archivo-4, largo_del_nombre_del_archivo);
-		//System.out.println(analizar);
 		if(analizar.equals(".zip")||analizar.equals(".rar")||analizar.equals(".tgz")||analizar.equals(".png")||analizar.equals(".jpg")||analizar.equals(".gif")
 				||analizar.equals(".xls")||analizar.equals(".dot")||analizar.equals(".pdf")){
 			return true;

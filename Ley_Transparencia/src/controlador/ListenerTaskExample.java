@@ -16,7 +16,6 @@ public class ListenerTaskExample implements ServletContextListener {
             public void run(){                
                 try {
                     while(true){
-                        //System.out.println("Se ejecuta una vez cada segundo");
                         JobExecutionContext jec=null;
                         new TareaInvocar().execute(jec);
                         Thread.sleep(500000);

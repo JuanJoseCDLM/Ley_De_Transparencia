@@ -100,7 +100,6 @@ public class BeanRegistrarReposicion implements Serializable{
 	
 	public String getNombreentidad() {
 		this.nombreentidad=entidad;
-		System.out.println(nombreentidad+"dsdss5");
 		return nombreentidad;
 	}
 
@@ -111,7 +110,6 @@ public class BeanRegistrarReposicion implements Serializable{
 
 	public String getAreaentidad() {
 		this.areaentidad=entidadarea;
-		System.out.println(areaentidad+"dsdss7");
 		return areaentidad;
 	}
 
@@ -122,7 +120,6 @@ public class BeanRegistrarReposicion implements Serializable{
 
 	public String getTipoinformacion() {
 		this.tipoinformacion=tipoinfo;
-		System.out.println(tipoinformacion+"dsdss6");
 		return tipoinformacion;
 	}
 
@@ -484,8 +481,6 @@ public class BeanRegistrarReposicion implements Serializable{
 		}catch (ParseException e){
 			e.printStackTrace();
 		}
-		System.out.println(fechafinal);
-		System.out.println(cedula);
 		gessolicitante.registrarreposicion(dato, observaciones,areaentidad,nombreentidad,tipoinformacion,añoinfo, cedula);
 		saveMessage();
 		return null;
@@ -533,7 +528,6 @@ public class BeanRegistrarReposicion implements Serializable{
 	
 	public void saveMessage() {
         FacesContext context = FacesContext.getCurrentInstance();
-        System.out.println("No entra al mensaje");
         context.addMessage(null, new FacesMessage("Successful",  "Solicitud enviada exitosamente.") );
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Excelente", "El derecho de reposición se realizo exitosamente.");
         //FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Excelente", "La petición se realizo exitosamente.\n Feliz día.");

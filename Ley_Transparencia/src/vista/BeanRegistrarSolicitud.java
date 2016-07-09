@@ -453,9 +453,6 @@ public class BeanRegistrarSolicitud implements Serializable{
 		}catch (ParseException e){
 			e.printStackTrace();
 		}
-		System.out.println(fechafinal);
-		System.out.println(cedula);
-		System.out.println(tipo+"++++");
 		gessolicitante.registrarpeticion(dato, observaciones,area,empresa,tipo,añoinfo, cedula);		
 		//FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Petición realizada exitosamente."));
 		//FacesContext context = FacesContext.getCurrentInstance();         
@@ -506,7 +503,6 @@ public class BeanRegistrarSolicitud implements Serializable{
     
     public void saveMessage() {
         FacesContext context = FacesContext.getCurrentInstance();
-        System.out.println("No entra al mensaje");
         context.addMessage(null, new FacesMessage("Successful",  "Solicitud enviada exitosamente.") );
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Excelente", "La petición se realizo exitosamente.");
         //FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Excelente", "La petición se realizo exitosamente.\n Feliz día.");
@@ -518,8 +514,9 @@ public class BeanRegistrarSolicitud implements Serializable{
         if(empresa !=null && !empresa.equals("")){
         	GestionUsuario gu = new GestionUsuario();
         	gu.cargarareas(empresa);
-            areas = data.get(empresa);System.out.println("Entrea para cambiar");}
+            areas = data.get(empresa);
+        }
         else{
-           areas = new HashMap<String, String>();System.out.println("Entrea para cambiar");}
+           areas = new HashMap<String, String>();}
     }
 }

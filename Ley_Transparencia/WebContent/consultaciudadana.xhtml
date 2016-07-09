@@ -83,8 +83,9 @@
 			
 			<p:column headerText="Descarga" style="width:15px;">
 				<center>
-					<h:commandButton value="Download" rendered="#{car.estado.tipoEstado != beanConsultaCiudadana.condicion}" id="ajax" ajax="false" update="growl" action="#{beanConsultaCiudadana.FileDownloadView(car.idPeticion)}"  >
-					<p:fileDownload value="#{beanConsultaCiudadana.file}" />
+					
+    				<h:commandButton value="Descarga 2" rendered="#{car.estado.tipoEstado != beanConsultaCiudadana.condicion}" id="ajax" ajax="false" update="growl" action="#{beanConsultaCiudadana.FileDownloadView(car.idPeticion)}"  >
+						<p:fileDownload value="#{beanConsultaCiudadana.file}" />
     				</h:commandButton>
     			</center>
 			</p:column>

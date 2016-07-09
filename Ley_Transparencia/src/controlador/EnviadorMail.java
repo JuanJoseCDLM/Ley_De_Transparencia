@@ -5,7 +5,7 @@ import javax.mail.internet.*;
 import java.util.*;
 
 public class EnviadorMail {
-    /*final String miCorreo = "respuestadesolicitudes@gmail.com";
+    final String miCorreo = "respuestadesolicitudes@gmail.com";
     final String miContraseña = "respuestadesolicitudes&&";
     final String servidorSMTP = "smtp.gmail.com";
     final String puertoEnvio = "465";
@@ -46,9 +46,9 @@ public class EnviadorMail {
             mex.printStackTrace();
         }
 
-    }*/
+    }
 
-    /*public class autentificadorSMTP extends javax.mail.Authenticator {
+    public class autentificadorSMTP extends javax.mail.Authenticator {
         public PasswordAuthentication getPasswordAuthentication() {
             return new PasswordAuthentication(miCorreo, miContraseña);
         }
@@ -57,10 +57,10 @@ public class EnviadorMail {
     /**
      * @param args
      */
-    //public static void main(String[] args) {
+    public static void main(String[] args) {
         // TODO Auto-generated method stub
-        //EnviadorMail EnviadorMail = new EnviadorMail("3jmona23@gmail.com",
-          //      "Este es el asunto de mi correo", "Este es el cuerpo de mi correo");
-    //}
+        EnviadorMail EnviadorMail = new EnviadorMail("3jmona23@gmail.com",
+              "Este es el asunto de mi correo", "Este es el cuerpo de mi correo");
+    }
 
 }

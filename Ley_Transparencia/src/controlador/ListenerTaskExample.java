@@ -11,12 +11,12 @@ public class ListenerTaskExample implements ServletContextListener {
     private Thread t = null;
     private ServletContext context;
     public void contextInitialized(ServletContextEvent contextEvent) {
-        /*t =  new Thread(){
+        t =  new Thread(){
             //task
             public void run(){                
                 try {
                     while(true){
-                        System.out.println("Se ejecuta una vez cada segundo");
+                        //System.out.println("Se ejecuta una vez cada segundo");
                         JobExecutionContext jec=null;
                         new TareaInvocar().execute(jec);
                         Thread.sleep(500000);
@@ -30,7 +30,7 @@ public class ListenerTaskExample implements ServletContextListener {
         t.start();
         context = contextEvent.getServletContext();
         // you can set a context variable just like this
-        context.setAttribute("TEST", "TEST_VALUE");*/
+        context.setAttribute("TEST", "TEST_VALUE");
     }
     public void contextDestroyed(ServletContextEvent contextEvent) {
         // si se destruye el contexto se interrumpe el thread

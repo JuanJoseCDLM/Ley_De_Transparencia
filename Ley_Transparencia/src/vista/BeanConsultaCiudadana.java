@@ -176,8 +176,9 @@ public class BeanConsultaCiudadana implements Serializable{
 	private StreamedContent file, file1;
     private String contentType;
     
-    public  StreamedContent FileDownloadView(String idformulario) throws IOException{        
-        System.out.println(idformulario);
+    public  void FileDownloadView(String idformulario) {        
+        int a=0;
+    	System.out.println(idformulario);
         InputStream stream1 = null;
     	// Aquí la carpeta donde queremos buscar    	
     	String nombre;
@@ -191,19 +192,27 @@ public class BeanConsultaCiudadana implements Serializable{
     			try {
     				stream1 = new FileInputStream(fichero);    				    				
 					String pathName="D:\\tmp\\"+nombre;
-					file = new DefaultStreamedContent(stream1, Files.probeContentType(Paths.get(pathName)), nombre);					
-					System.out.println("El fichero " + Fichero + " se descargo");
-					
+					//InputStream inputstream = new FileInputStream("C:\\Users\\JuanJose\\Downloads\\wallpaper.jpg");
+		        	content = new DefaultStreamedContent(stream1,"application/jpg","descarga.jpg");
+					try {
+						file = new DefaultStreamedContent(stream1, Files.probeContentType(Paths.get(pathName)), nombre);
+					} catch (IOException e) {
+
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}					
+					System.out.println("El fichero " + Fichero + " se descargo");					
+					a=1;
+					break;
 					//
-					return file;
+					//return file;
     			} catch (FileNotFoundException e){
     				System.out.println("Frfregtrgtrt");
     				// TODO Auto-generated catch block
     				e.printStackTrace();    				
     				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error","El archivo no se encuentra."));
-    				return null;
-    			}
-    	        	
+    				//return null;
+    			}    	        	
     		}
     		else{
     			//stream1.close();
@@ -211,7 +220,7 @@ public class BeanConsultaCiudadana implements Serializable{
     		}
         }
     	//stream1.close();
-    	return null;
+    	//return null;
     }
     
     public String cerrarsesion(){
@@ -245,10 +254,29 @@ public class BeanConsultaCiudadana implements Serializable{
         return "index.xhtml";    	
     }
     
-    public Object FileDownloadViewPrueba() {        
-        InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("C:/Users/JuanJose/Downloads/footer.png");        
+    private StreamedContent content;
+    
+    public void FileDownloadViewPrueba() {        
+        /*InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("C:/Users/JuanJose/Downloads/footer.png");        
         file = new DefaultStreamedContent(stream, "image/png", "downloaded_optimus.png");
-        return file;
+        return file;*/
+    	try {       	
+            //content = new DefaultStreamedContent(new FileInputStream(new File("C:\\Users\\JuanJose\\Downloads\\wallpaper.jpg")),Files.probeContentType(Paths.get("C:\\Users\\JuanJose\\Downloads\\wallpaper.jpg")),"primefaces_5.jpg");
+        	InputStream inputstream = new FileInputStream("C:\\Users\\JuanJose\\Downloads\\wallpaper.jpg");
+        	content = new DefaultStreamedContent(inputstream,"application/jpg","primefaces_5.jpg");
+        }
+        catch(Exception e){
+            // Nothing
+        	//content=null;
+        }
+    }
+    
+    public StreamedContent getContent() {
+        return content;
+    }
+ 
+    public void setContent(StreamedContent content) {
+        this.content = content;
     }
  
     public StreamedContent getFile() {
